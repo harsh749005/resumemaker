@@ -2,6 +2,7 @@ import CertificationsStep from "@/components/CertificationsStep";
 import EducationStep from "@/components/EducationStep";
 import LanguagesStep from "@/components/LanguagesStep";
 import PersonalInfoStep from "@/components/PersonalInfoStep";
+import ResumeOptions from "@/components/ResumeOptions";
 import ReviewStep from "@/components/ReviewStep";
 import SkillsStep from "@/components/SkillStep";
 import SummaryStep from "@/components/SummaryStep";
@@ -19,6 +20,7 @@ export default function Index() {
     skills: [],
     certifications: [],
     languages: [],
+    selected_template: "",
   });
     // 🔹 Update Personal Info (nested object)
   const updatePersonalInfo = (field, value) => {
@@ -112,10 +114,16 @@ export default function Index() {
     setFormData({ ...formData, skills: updated });
   };
 
+  // 🔹 Update Selected Template
+  const updateSelectedTemplate = (value) => {
+    console.log("Selected Template in Index:", value);
+    setFormData((prev) => ({ ...prev, selected_template: value }));
+  };
+
   // 🔹 Navigation
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
-  const totalSteps = 8;
+  const totalSteps = 9;
   const progress = step / totalSteps;
   return (
        <View style={{ flex: 1, padding: 20 }}>
@@ -126,7 +134,7 @@ export default function Index() {
 </View>
 <Text style={styles.header}>Step {step} / {totalSteps}</Text>
       {/* Step Counter */}
-      <Text style={{ fontSize: 18, marginBottom: 10 }}>Step {step}/8</Text>
+      {/* <Text style={{ fontSize: 18, marginBottom: 10 }}>Step {step}/9</Text> */}
 
       {step === 1 && (
         <PersonalInfoStep
@@ -193,6 +201,13 @@ export default function Index() {
       )}
 
       {step === 8 && (
+        <ResumeOptions
+          nextStep={nextStep}
+          prevStep={prevStep}
+          updateSelectedTemplate={updateSelectedTemplate}
+        />
+      )}
+      {step === 9 && (
         <ReviewStep data={formData} prevStep={prevStep} />
       )}
     </View>

@@ -1,0 +1,387 @@
+export const template = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harsh Patel - Resume</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            line-height: 1.4;
+            color: #000;
+            background-color: #fff;
+            font-size: 11px;
+        }
+
+        .resume-container {
+            max-width: 8.5in;
+            margin: 0 auto;
+            padding: 0.5in;
+            background-color: white;
+            min-height: 11in;
+        }
+
+        .header {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .left-header {
+            text-align: left;
+        }
+
+        .right-header {
+            text-align: right;
+        }
+
+        .name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .title {
+            font-size: 12px;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .contact-info {
+            font-size: 10px;
+            line-height: 1.3;
+        }
+
+        .contact-info a {
+            color: #000;
+            text-decoration: none;
+        }
+
+        .section {
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            border-bottom: 1px solid #000;
+            padding-bottom: 2px;
+        }
+
+        .experience-item, .project-item {
+            margin-bottom: 15px;
+        }
+
+        .job-header, .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 5px;
+        }
+
+        .company-role {
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .company-name {
+            font-weight: bold;
+            font-size: 11px;
+        }
+
+        .job-title {
+            font-style: italic;
+            font-size: 11px;
+        }
+
+        .duration {
+            font-size: 10px;
+            font-style: italic;
+            text-align: right;
+        }
+
+        .project-name {
+            font-weight: bold;
+            font-style: italic;
+            font-size: 11px;
+        }
+
+        .tech-stack {
+            font-size: 10px;
+            color: #666;
+        }
+
+        .bullet-points {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .bullet-points li {
+            margin-bottom: 4px;
+            padding-left: 25px;
+            position: relative;
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        .bullet-points li::before {
+            content: "•";
+            position: absolute;
+            left: 12px;
+            font-weight: bold;
+        }
+
+        .skills-content {
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        .skill-category {
+            margin-bottom: 3px;
+        }
+
+        .skill-label {
+            font-weight: bold;
+            display: inline-block;
+            min-width: 140px;
+        }
+
+        .education-item {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .education-left {
+            flex: 1;
+        }
+
+        .education-right {
+            text-align: right;
+            font-size: 10px;
+        }
+
+        .education-details {
+            font-weight: bold;
+            font-size: 11px;
+        }
+
+        .degree {
+            font-size: 10px;
+            margin-top: 2px;
+        }
+
+        .gpa {
+            font-size: 10px;
+            margin-top: 2px;
+        }
+
+        .summary-content {
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        .summary-content li {
+            margin-bottom: 4px;
+            padding-left: 25px;
+            position: relative;
+            list-style: none;
+            line-height: 1.5;
+        }
+
+        .summary-content li::before {
+            content: "•";
+            position: absolute;
+            left: 12px;
+            font-weight: bold;
+        }
+
+        .project-link {
+            font-size: 9px;
+            color: #0066cc;
+            text-decoration: none;
+        }
+
+        .contact-icon {
+            width: 16px;
+            height: 16px;
+            vertical-align: middle;
+            margin-right: 4px;
+        }
+        .project-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="resume-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="left-header">
+                <div class="name">HARSH PATEL</div>
+                <div class="title">Full Stack Developer | React.js | Express.js |<br>MySQL | MongoDB | Tailwind CSS</div>
+                <div class="contact-info">
+                    <img src="assets/images/logos/email.png" alt="Email" class="contact-icon"><a href="mailto:patelharsh749005@gmail.com">patelharsh749005@gmail.com</a><br>
+                    <img src="assets/images/logos/phone.png" alt="Phone" class="contact-icon">+91 9054-140-350
+                </div>
+            </div>
+            <div class="right-header">
+                <div class="contact-info">
+                    <img src="assets/images/logos/github.png" alt="GitHub" class="contact-icon"><a href="https://github.com/harsh749005">github.com/harsh749005</a><br>
+                    <img src="assets/images/logos/linkedin.png" alt="LinkedIn" class="contact-icon"><a href="https://linkedin.com/in/harsh">linkedin.com/in/harsh</a><br>
+                    <img src="assets/images/logos/leetcode.png" alt="LeetCode" class="contact-icon"><a href="https://leetcode.com/u/harshpatel">leetcode.com/u/harshpatel</a><br>
+                    <img src="assets/images/logos/twitter.png" alt="X/Twitter" class="contact-icon"><a href="https://x.com/harsh2461">x.com/harsh2461</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Experience Section -->
+        <div class="section">
+            <div class="section-title">Experience</div>
+            
+            <div class="experience-item">
+                <div class="job-header">
+                    <div>
+                        <div class="company-name">AxamineAI</div>
+                        <div class="job-title">FullStack Developer</div>
+                    </div>
+                    <div class="duration">May 2025 - present</div>
+                </div>
+                <ul class="bullet-points">
+                    <li>Developed and managed backend using Next.js, Tailwind and serverless Neon DB.</li>
+                    <li>Built APIs to efficiently store models and user conversations.</li>
+                    <li>Designed secure APIs and optimized PostgreSQL and Neon DB serverless databases for performance.</li>
+                    <li>Redesigned UI of the Chat Bot which increases the user interactivity.</li>
+                    <li>Secured deployment on Vercel.</li>
+                </ul>
+            </div>
+
+            <div class="experience-item">
+                <div class="job-header">
+                    <div>
+                        <div class="company-name">OpenRag</div>
+                        <div class="job-title">FullStack Developer</div>
+                    </div>
+                    <div class="duration">Jan 2025 – Feb 2025</div>
+                </div>
+                <ul class="bullet-points">
+                    <li>Redesigned the whole website using React.js, ReactBits, Mongodb and Express, this led to increase in user traffic by 35%.</li>
+                    <li>Created an admin panel to download the reports of Total user submitted form.</li>
+                    <li>A javascript library ReactBits is used to add Text effects, background, and some animations.</li>
+                    <li>Implemented JWT authentication and middleware to add security layer. Bcrypt is used to hash the password.</li>
+                    <li>Successfully deployed the full stack application using Render for the backend and Vercel for the frontend.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Projects Section -->
+        <div class="section">
+            <div class="section-title">Projects</div>
+            
+            <div class="project-item">
+                <div class="project-header">
+                    <div>
+                        <span class="project-name">GhostSafe</span> – <span class="tech-stack">Next.js, NeonDB, Tailwind CSS, JWT authentication, Bcrypt</span>
+                    </div>
+                </div>
+                <ul class="bullet-points">
+                    <li>Built a secure platform focused on protecting user data and privacy with responsive UI and JWT authentication for security.</li>
+                    <li>Developed CRUD Operation, Inserting, Fetching and Updating for efficient data management.</li>
+                    <li>Used Jose and Bcrypt to securely handle password encryption and decryption.</li>
+                    <li>A live demo: <a href="https://ghost-safe.vercel.app/" class="project-link">https://ghost-safe.vercel.app/</a></li>
+                </ul>
+            </div>
+
+            <div class="project-item">
+                <div class="project-header">
+                    <div>
+                        <span class="project-name">Foodie</span> – <span class="tech-stack">React.js, Tailwind CSS</span>
+                    </div>
+                </div>
+                <ul class="bullet-points">
+                    <li>Developed a website showcasing different food items with responsive UI.</li>
+                    <li>Implemented Content Provider to access the data across the pages.</li>
+                    <li>A live demo: <a href="https://harsh749005.github.io/foodie/" class="project-link">https://harsh749005.github.io/foodie/</a></li>
+                </ul>
+            </div>
+
+            <div class="project-item">
+                <div class="project-header">
+                    <div>
+                        <span class="project-name">PetPals</span> – <span class="tech-stack">React.js, Tailwind CSS</span>
+                    </div>
+                </div>
+                <ul class="bullet-points">
+                    <li>Built a responsive pet marketplace website.</li>
+                    <li>A live demo: <a href="https://pet-pals-ten.vercel.app/" class="project-link">https://pet-pals-ten.vercel.app/</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Skills Section -->
+        <div class="section">
+            <div class="section-title">Skills</div>
+            <div class="skills-content">
+                <div class="skill-category">
+                    <span class="skill-label">Programming Languages:</span> JavaScript, SQL, HTML/CSS, NoSQL.
+                </div>
+                <div class="skill-category">
+                    <span class="skill-label">Web Development:</span> React.js, Next.js, Node.js, Express.js, PostgreSQL, MongoDB, JWT, RESTful APIs, Tailwind CSS.
+                </div>
+                <div class="skill-category">
+                    <span class="skill-label">DevOps & Tools:</span> Git/GitHub, Docker, Vite.js, Render, Vercel.
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="section">
+            <div class="section-title">Summary of qualification</div>
+            <ul class="summary-content">
+                <li>Experience in full stack development and continuously enhancing my skills in frontend and backend.</li>
+                <li>I am eager to leverage my skills to create scalable web applications and solve complex problems.</li>
+                <li>My projects highlight my ability to seamlessly integrate frontend and backend technologies.</li>
+            </ul>
+        </div>
+
+        <!-- Education Section -->
+        <div class="section">
+            <div class="section-title">Education</div>
+            
+            <div class="education-item">
+                <div class="education-left">
+                    <div class="education-details">ITM(SLS) Baroda University: B.TECH in Computer Science and Engineering</div>
+                </div>
+                <div class="education-right">
+                    <div class="duration">May 2023 – Present</div>
+                    <div class="gpa">Major GPA: 8.81 / 10</div>
+                </div>
+            </div>
+
+            <div class="education-item">
+                <div class="education-left">
+                    <div class="education-details">ITM(SLS) Baroda University: Diploma in Computer Science and Engineering</div>
+                </div>
+                <div class="education-right">
+                    <div class="duration">May 2021 – April 2023</div>
+                    <div class="gpa">Major GPA: 9.23 / 10</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+`

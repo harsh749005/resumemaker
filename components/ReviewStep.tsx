@@ -1,10 +1,18 @@
 import React from "react";
 import { View, Text, Button, ScrollView } from "react-native";
-
+import { generatePDF } from "./GeneratePDF";
 const ReviewStep = ({ data, prevStep }) => {
-  const handleSubmit = () => {
-    console.log("Final Form Data:", data);
-    alert("Form Submitted Successfully!");
+  const handleSubmit = async () => {
+    try{
+      console.log("Final Form Data:", data);
+      alert("Form Submitted Successfully!");
+      const pdfPath = await generatePDF(data);
+       alert(`PDF saved at: ${pdfPath}`);
+      // Here you can also open/share the PDF if you want
+    }catch(err){
+            console.error("Error generating PDF:", err);
+      alert("Something went wrong while generating the PDF.");
+    }
   };
 
   return (
@@ -53,13 +61,16 @@ const ReviewStep = ({ data, prevStep }) => {
         Professional Summary
       </Text>
       <Text>{data.professional_summary}</Text>
+      {/* Selected Template */}
+      <Text style={{ fontWeight: "bold", marginTop: 10 }}>Selected Template</Text>
+      <Text>{data.selected_template}</Text>
 
       {/* Navigation */}
       <View
         style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 20 }}
       >
         <Button title="Back" onPress={prevStep} />
-        <Button title="Submit" onPress={handleSubmit} />
+        <Button title="Submit & Generate PDF" onPress={handleSubmit} />
       </View>
     </ScrollView>
   );
