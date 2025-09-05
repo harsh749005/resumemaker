@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, Platform } from "react-native";
+import { View, Text, TextInput, Button, Switch } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 const WorkExperienceStep = ({
@@ -11,32 +11,39 @@ const WorkExperienceStep = ({
 }) => {
   const workExperience = data.work_experience || [];
   const [date, setDate] = useState(new Date());
-  const [showPicker, setShowPicker] = useState(false);
+  const [showPicker, setShowPicker] = useState({ visible: false, field: null, index: null });
+  const formattedMonthYear = (currentDate) => {
+    return currentDate.toLocaleDateString("en-US", {
+      month: "short",
+      year: "numeric",
+    });
+  };
+
   const onChange = (event, selectedDate) => {
+    if (event.type === "dismissed") {
+      setShowPicker({ visible: false, field: null, index: null });
+      return;
+    }
+
     const currentDate = selectedDate || date;
-    setShowPicker(Platform.OS === "ios"); // Keep picker open on iOS if no date selected yet
     setDate(currentDate);
-    const data1 = currentDate.toString();
-    // split string by spaces
-    const parts = data1.split(" ");
 
-    // extract year (index 3)
-    const year = parts[3];
-    const month = parts[1];
+    // save directly into workExperience
+    updateExperience(
+      showPicker.index,
+      showPicker.field,
+      formattedMonthYear(currentDate)
+    );
 
-    console.log("Extracted year:", year);
-    // const month = monthsArr.find(mon => data1.includes(mon));
-    console.log("Selected month : ", month);
+    setShowPicker({ visible: false, field: null, index: null });
   };
-  const showDatepicker = () => {
-    setShowPicker(true);
-  };
+
+ 
+
 
   return (
     <View style={{ gap: 12 }}>
-      <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-        Step 2: Work Experience
-      </Text>
+      <Text style={{ fontSize: 18, fontWeight: "bold" }}>Step 2: Work Experience</Text>
 
       {workExperience.map((exp, index) => (
         <View
@@ -52,74 +59,66 @@ const WorkExperienceStep = ({
           <Text style={{ fontWeight: "bold" }}>Experience {index + 1}</Text>
 
           <TextInput
-            style={{
-              borderWidth: 1,
-              borderColor: "#ddd",
-              borderRadius: 8,
-              padding: 8,
-              marginTop: 6,
-            }}
+            style={{ borderWidth: 1, borderColor: "#ddd", borderRadius: 8, padding: 8, marginTop: 6 }}
             placeholder="Company"
             value={exp.company || ""}
             onChangeText={(val) => updateExperience(index, "company", val)}
           />
 
           <TextInput
-            style={{
-              borderWidth: 1,
-              borderColor: "#ddd",
-              borderRadius: 8,
-              padding: 8,
-              marginTop: 6,
-            }}
+            style={{ borderWidth: 1, borderColor: "#ddd", borderRadius: 8, padding: 8, marginTop: 6 }}
             placeholder="Role"
             value={exp.role || ""}
             onChangeText={(val) => updateExperience(index, "role", val)}
           />
-
-          <TextInput
-            style={{
-              borderWidth: 1,
-              borderColor: "#ddd",
-              borderRadius: 8,
-              padding: 8,
-              marginTop: 6,
-            }}
-            placeholder="Years"
-            value={exp.years || ""}
-            onChangeText={(val) => updateExperience(index, "years", val)}
-            keyboardType="numeric"
+                    <TextInput
+            style={{ borderWidth: 1, borderColor: "#ddd", borderRadius: 8, padding: 8, marginTop: 6 }}
+            placeholder="Year of experience"
+            value={exp.year || ""}
+            onChangeText={(val) => updateExperience(index, "year", val)}
           />
-          <View style={{ justifyContent: "center", alignItems: "center" }}>
-            <Text>Selected Date: {date.toLocaleDateString()}</Text>
-            <Button onPress={showDatepicker} title="Show Date Picker" />
-            {showPicker && (
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={date}
-                mode="date" // Can be 'date', 'time', or 'datetime'
-                display="spinner" // Can be 'default', 'spinner', 'calendar', 'clock'
-                onChange={onChange}
-              />
-            )}
+
+          {/* Start Date */}
+          <View style={{ marginTop: 10 }}>
+            <Text>Start: {exp.start || "Not selected"}</Text>
+            <Button
+              title="Pick Start Date"
+              onPress={() => setShowPicker({ visible: true, field: "start", index })}
+            />
           </View>
+
+          {/* End Date */}
+          <View style={{ marginTop: 10 }}>
+            <Text>End: {exp.end || "Not selected"}</Text>
+            <Button
+              title="Pick End Date"
+              onPress={() => setShowPicker({ visible: true, field: "end", index })}
+              disabled={exp.end === "Present"}
+            />
+            <View style={{ flexDirection: "row", alignItems: "center", marginTop: 6 }}>
+              <Switch
+                value={exp.end === "Present"}
+                onValueChange={(val) =>
+                  updateExperience(index, "end", val ? "Present" : "")
+                }
+              />
+              <Text style={{ marginLeft: 8 }}>Currently working here</Text>
+            </View>
+          </View>
+
         </View>
       ))}
 
-      {/* Add new experience */}
+      {showPicker.visible && (
+        <DateTimePicker value={date} mode="date" display="spinner" onChange={onChange} />
+      )}
+
       <Button
         title="➕ Add Work Experience"
-        onPress={() => addExperience({ company: "", role: "", years: "" })}
+        onPress={() => addExperience({ company: "", role: "", start: "", end: "" })}
       />
 
-      {/* Navigation buttons */}
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          marginTop: 20,
-        }}
-      >
+      <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 20 }}>
         <Button title="Back" onPress={prevStep} />
         <Button title="Next" onPress={nextStep} />
       </View>

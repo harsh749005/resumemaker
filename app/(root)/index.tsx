@@ -1,6 +1,7 @@
 import CertificationsStep from "@/components/CertificationsStep";
 import EducationStep from "@/components/EducationStep";
 import LanguagesStep from "@/components/LanguagesStep";
+import OnboardingScreen from "@/app/(auth)/OnBoardingScreen"
 import PersonalInfoStep from "@/components/PersonalInfoStep";
 import ResumeOptions from "@/components/ResumeOptions";
 import ReviewStep from "@/components/ReviewStep";
@@ -142,6 +143,7 @@ export default function Index() {
           updatePersonalInfo={updatePersonalInfo}
           nextStep={nextStep}
         />
+        // <OnboardingScreen/>
       )}
 
       {step === 2 && (
@@ -193,6 +195,7 @@ export default function Index() {
       
       {step === 7 && (
         <SummaryStep
+          data={formData}
           summary={formData.professional_summary}
           updateSummary={updateSummary}
           nextStep={nextStep}

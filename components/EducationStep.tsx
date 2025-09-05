@@ -33,9 +33,9 @@ const EducationStep = ({ data, addEducation, updateEducation, nextStep, prevStep
           />
           <TextInput
             style={{ borderWidth: 1, borderColor: "#ddd", borderRadius: 8, padding: 8, marginTop: 6 }}
-            placeholder="Year"
-            value={edu.year || ""}
-            onChangeText={(val) => updateEducation(index, "year", val)}
+            placeholder="cgpa/10 or percentage"
+            value={edu.cgpa || ""}
+            onChangeText={(val) => updateEducation(index, "cgpa", val)}
           />
         </View>
       ))}

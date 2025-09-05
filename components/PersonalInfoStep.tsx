@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, TextInput, Button } from "react-native";
+import { SignOutButton } from "./SignOutButton";
 
 const PersonalInfoStep = ({ data, updatePersonalInfo, nextStep }) => {
   return (
@@ -36,6 +37,7 @@ const PersonalInfoStep = ({ data, updatePersonalInfo, nextStep }) => {
       />
 
       <Button title="Next" onPress={nextStep} />
+      <SignOutButton/>
     </View>
   );
 };

@@ -30,7 +30,8 @@ const ReviewStep = ({ data, prevStep }) => {
         <View key={i} style={{ marginBottom: 6 }}>
           <Text>Company: {exp.company}</Text>
           <Text>Role: {exp.role}</Text>
-          <Text>Years: {exp.years}</Text>
+          <Text>Start: {exp.start}</Text>
+          <Text>End: {exp.end}</Text>
         </View>
       ))}
 
@@ -40,7 +41,7 @@ const ReviewStep = ({ data, prevStep }) => {
           <Text>Degree: {edu.degree}</Text>
           <Text>Field of Study: {edu.field}</Text>
           <Text>Institution: {edu.institution}</Text>
-          <Text>Years: {edu.year}</Text>
+          <Text>cgpa: {edu.cgpa}</Text>
         </View>
       ))}
       <Text style={{ fontWeight: "bold", marginTop: 10 }}>Skills</Text>
