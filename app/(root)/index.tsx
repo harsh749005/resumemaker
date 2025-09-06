@@ -1,15 +1,14 @@
 import CertificationsStep from "@/components/CertificationsStep";
 import EducationStep from "@/components/EducationStep";
 import LanguagesStep from "@/components/LanguagesStep";
-import OnboardingScreen from "@/app/(auth)/OnBoardingScreen"
-import PersonalInfoStep from "@/components/PersonalInfoStep";
 import ResumeOptions from "@/components/ResumeOptions";
 import ReviewStep from "@/components/ReviewStep";
 import SkillsStep from "@/components/SkillStep";
 import SummaryStep from "@/components/SummaryStep";
 import WorkExperienceStep from "@/components/WorkExperience";
 import { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import SafeScreen from "@/components/appcomp/SafeScreen";
 
 export default function Index() {
   const [step, setStep] = useState(1);
@@ -23,7 +22,7 @@ export default function Index() {
     languages: [],
     selected_template: "",
   });
-    // 🔹 Update Personal Info (nested object)
+  // 🔹 Update Personal Info (nested object)
   const updatePersonalInfo = (field, value) => {
     setFormData((prev) => ({
       ...prev,
@@ -31,7 +30,7 @@ export default function Index() {
     }));
   };
 
-    // 🔹 Add Work Experience
+  // 🔹 Add Work Experience
   const addWorkExperience = (exp) => {
     setFormData((prev) => ({
       ...prev,
@@ -46,11 +45,16 @@ export default function Index() {
     );
     setFormData({ ...formData, work_experience: updated });
   };
+  // Remove Exprerienc
+  const removeExperience = (index) => {
+    const updated = formData.work_experience.filter((_, i) => i !== index);
+    setFormData({ ...formData, work_experience: updated });
+  };
+
   // 🔹 Update Summary
   const updateSummary = (value) => {
     setFormData((prev) => ({ ...prev, professional_summary: value }));
   };
-
 
   // add Certification
   const addCertification = (cert) => {
@@ -83,6 +87,10 @@ export default function Index() {
     );
     setFormData({ ...formData, education: updated });
   };
+  const handleRemoveEducationExperience = (index) => {
+    const updated = formData.education.filter((_, i) => i !== index);
+    setFormData({ ...formData, education: updated });
+  };
 
   // 🔹 Add Languages
   const addLanguage = (lang) => {
@@ -91,7 +99,7 @@ export default function Index() {
       languages: [...prev.languages, lang],
     }));
   };
- 
+
   // 🔹 Update Languages
   const updateLanguage = (index, value) => {
     const updated = formData.languages.map((lang, i) =>
@@ -127,107 +135,117 @@ export default function Index() {
   const totalSteps = 9;
   const progress = step / totalSteps;
   return (
-       <View style={{ flex: 1, padding: 20 }}>
+    <SafeScreen>
+      <View style={{ flex: 1, padding: 20 }}>
         {/* Progress Bar */}
-<View style={styles.progressContainer}>
-  <View style={[styles.progressFill, { flex: step, backgroundColor: "#4caf50" }]} />
-  <View style={{ flex: totalSteps - step, backgroundColor: "#eee" }} />
-</View>
-<Text style={styles.header}>Step {step} / {totalSteps}</Text>
-      {/* Step Counter */}
-      {/* <Text style={{ fontSize: 18, marginBottom: 10 }}>Step {step}/9</Text> */}
+        <View style={styles.progressContainer}>
+          <View
+            style={[
+              styles.progressFill,
+              { flex: step, backgroundColor: "#000" },
+            ]}
+          />
+          <View style={{ flex: totalSteps - step, backgroundColor: "#eee" }} />
+        </View>
+        {/* <Text style={styles.header}>Step {step} / {totalSteps}</Text> */}
+        {/* Step Counter */}
+        {/* <Text style={{ fontSize: 18, marginBottom: 10 }}>Step {step}/9</Text> */}
 
-      {step === 1 && (
-        <PersonalInfoStep
-          data={formData.personal_info}
-          updatePersonalInfo={updatePersonalInfo}
-          nextStep={nextStep}
-        />
-        // <OnboardingScreen/>
-      )}
+        {step === 1 && (
+          // <PersonalInfoStep
+          //   data={formData.personal_info}
+          //   updatePersonalInfo={updatePersonalInfo}
+          //   nextStep={nextStep}
+          // />
+          <ResumeOptions
+            nextStep={nextStep}
+            prevStep={prevStep}
+            updateSelectedTemplate={updateSelectedTemplate}
+          />
+          // <OnboardingScreen/>
+        )}
 
-      {step === 2 && (
-        <WorkExperienceStep
-          data={formData}
-          addExperience={addWorkExperience}
-          updateExperience={updateWorkExperience}
-          nextStep={nextStep}
-          prevStep={prevStep}
-        />
-      )}
+        {step === 2 && (
+          <WorkExperienceStep
+            data={formData}
+            addExperience={addWorkExperience}
+            updateExperience={updateWorkExperience}
+            removeExperience={removeExperience}
+            nextStep={nextStep}
+            prevStep={prevStep}
+          />
+        )}
 
-                  {step === 3 && (
-        <EducationStep
-          data={formData}
-          addEducation={addEducation}
-          updateEducation={updateEducation}
-          nextStep={nextStep}
-          prevStep={prevStep}
-        />
-      )}
-                  {step === 4 && (
-        <LanguagesStep
-          data={formData}
-          addLanguage={addLanguage}
-          updateLanguage={updateLanguage}
-          nextStep={nextStep}
-          prevStep={prevStep}
-        />
-      )}
-                  {step === 5 && (
-        <SkillsStep
-          data={formData}
-          addSkill={addSkill}
-          updateSkill={updateSkill}
-          nextStep={nextStep}
-          prevStep={prevStep}
-        />
-      )}
-            {step === 6 && (
-        <CertificationsStep
-          data={formData}
-          addCertification={addCertification}
-          updateCertification={updateCertification}
-          nextStep={nextStep}
-          prevStep={prevStep}
-        />
-      )}
-      
-      {step === 7 && (
-        <SummaryStep
-          data={formData}
-          summary={formData.professional_summary}
-          updateSummary={updateSummary}
-          nextStep={nextStep}
-          prevStep={prevStep}
-        />
-      )}
+        {step === 3 && (
+          <EducationStep
+            data={formData}
+            addEducation={addEducation}
+            updateEducation={updateEducation}
+            removeEducationExperience={handleRemoveEducationExperience}
+            nextStep={nextStep}
+            prevStep={prevStep}
+          />
+        )}
+        {step === 4 && (
+          <LanguagesStep
+            data={formData}
+            addLanguage={addLanguage}
+            updateLanguage={updateLanguage}
+            nextStep={nextStep}
+            prevStep={prevStep}
+          />
+        )}
+        {step === 5 && (
+          <SkillsStep
+            data={formData}
+            addSkill={addSkill}
+            updateSkill={updateSkill}
+            nextStep={nextStep}
+            prevStep={prevStep}
+          />
+        )}
+        {step === 6 && (
+          <CertificationsStep
+            data={formData}
+            addCertification={addCertification}
+            updateCertification={updateCertification}
+            nextStep={nextStep}
+            prevStep={prevStep}
+          />
+        )}
 
-      {step === 8 && (
-        <ResumeOptions
-          nextStep={nextStep}
-          prevStep={prevStep}
-          updateSelectedTemplate={updateSelectedTemplate}
-        />
-      )}
-      {step === 9 && (
-        <ReviewStep data={formData} prevStep={prevStep} />
-      )}
-    </View>
+        {step === 7 && (
+          <SummaryStep
+            data={formData}
+            summary={formData.professional_summary}
+            updateSummary={updateSummary}
+            nextStep={nextStep}
+            prevStep={prevStep}
+          />
+        )}
+
+        {step === 8 && (
+          <ResumeOptions
+            nextStep={nextStep}
+            prevStep={prevStep}
+            updateSelectedTemplate={updateSelectedTemplate}
+          />
+        )}
+        {step === 9 && <ReviewStep data={formData} prevStep={prevStep} />}
+      </View>
+    </SafeScreen>
   );
 }
 
-
 const styles = StyleSheet.create({
   progressContainer: {
-  flexDirection: "row",
-  height: 12,
-  borderRadius: 6,
-  overflow: "hidden",
-  marginBottom: 15,
-},
-progressFill: {
-  borderRadius: 6,
-},
-
-})
+    flexDirection: "row",
+    height: 2,
+    // borderRadius: 6,
+    overflow: "hidden",
+    marginBottom: 15,
+  },
+  progressFill: {
+    // borderRadius: 6,
+  },
+});

@@ -1,8 +1,11 @@
 import React from "react";
 import { View, Text, TextInput, Button } from "react-native";
 import { SignOutButton } from "./SignOutButton";
+import { useUser } from "@clerk/clerk-expo";
 
 const PersonalInfoStep = ({ data, updatePersonalInfo, nextStep }) => {
+    const { user } = useUser();
+  console.log(user?.emailAddresses[0].emailAddress);
   return (
     <View style={{ gap: 12 }}>
       <Text style={{ fontSize: 18, fontWeight: "bold" }}>

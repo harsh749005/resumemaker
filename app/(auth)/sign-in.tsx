@@ -20,7 +20,6 @@ export default function LoginScreen() {
   const router = useRouter();
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setname] = useState("");
   const [disable, setDisable] = useState(false);
 
   // 🔹 Validate form whenever inputs change
@@ -91,13 +90,6 @@ export default function LoginScreen() {
               Welcome back, ready to get started?
             </Text>
             <TextInput
-              style={styles.input}
-              autoCapitalize="none"
-              value={name}
-              placeholder="Your name"
-              onChangeText={setname}
-            />
-            <TextInput
               autoCapitalize="none"
               value={emailAddress}
               placeholder="Enter email"
@@ -114,6 +106,7 @@ export default function LoginScreen() {
             />
 
             <TouchableOpacity
+              disabled={disable} 
               style={disable ? styles.disablebutton : styles.button}
               onPress={onSignInPress}
             >

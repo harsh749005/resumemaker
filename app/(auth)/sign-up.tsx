@@ -18,6 +18,7 @@ import SafeScreen from "@/components/appcomp/SafeScreen";
 export default function SignUpScreen() {
   const { isLoaded, signUp, setActive } = useSignUp();
   const router = useRouter();
+  // inside your component
 
   const [emailAddress, setEmailAddress] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -25,12 +26,29 @@ export default function SignUpScreen() {
 
   const [pendingVerification, setPendingVerification] = React.useState(false);
   const [code, setCode] = React.useState("");
+  const [disable, setDisable] = React.useState(false);
+
+  // 🔹 Validate form whenever inputs change
+  React.useEffect(() => {
+    if (
+      name &&
+      emailAddress &&
+      password &&
+      emailAddress.includes("@") &&
+      password.length >= 6
+    ) {
+      setDisable(false);
+    } else {
+      setDisable(true);
+    }
+  }, [name, emailAddress, password]);
+
   // 🔹 Handle Sign Up
   const onSignUpPress = async () => {
     if (!isLoaded) return;
 
     try {
-      await signUp.create({ emailAddress, password });
+      await signUp.create({ username: name,emailAddress, password });
       await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
       setPendingVerification(true);
     } catch (err) {
@@ -117,7 +135,11 @@ export default function SignUpScreen() {
               style={styles.input}
             />
 
-            <TouchableOpacity style={styles.button} onPress={onSignUpPress}>
+            <TouchableOpacity
+              disabled={disable}
+              style={disable ? styles.disablebutton : styles.button}
+              onPress={onSignUpPress}
+            >
               <Text style={styles.buttonText}>Continue</Text>
             </TouchableOpacity>
 
@@ -154,6 +176,7 @@ const styles = StyleSheet.create({
     fontFamily: "PlayfairDisplayRegular",
     fontSize: 28,
     marginBottom: 20,
+    textAlign:"center"
   },
   verifyCode: {
     textAlign: "center",
@@ -163,6 +186,12 @@ const styles = StyleSheet.create({
     fontFamily: "PlayfairDisplayRegular",
     fontSize: 18,
     paddingVertical: 6,
+  },
+  disablebutton: {
+    backgroundColor: "gray",
+    padding: 14,
+    alignItems: "center",
+    opacity: 0.8,
   },
   button: {
     backgroundColor: "black",
