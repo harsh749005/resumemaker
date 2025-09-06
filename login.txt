@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  Alert,
   Dimensions,
   KeyboardAvoidingView,
   Platform,
@@ -14,6 +15,9 @@ import {
 import { useSignIn } from "@clerk/clerk-expo";
 import { Link, useRouter } from "expo-router";
 import SafeScreen from "@/components/appcomp/SafeScreen";
+import AntDesign from "@expo/vector-icons/AntDesign";
+
+const { width } = Dimensions.get("window");
 
 export default function LoginScreen() {
   const { signIn, setActive, isLoaded } = useSignIn();
@@ -21,11 +25,12 @@ export default function LoginScreen() {
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [name, setname] = useState("");
-  const [disable, setDisable] = useState(false);
+  const [disable,setDisable] = useState(false);
 
-  // 🔹 Validate form whenever inputs change
+    // 🔹 Validate form whenever inputs change
   useEffect(() => {
     if (
+      
       emailAddress &&
       password &&
       emailAddress.includes("@") &&
@@ -40,13 +45,13 @@ export default function LoginScreen() {
   const onSignInPress = async () => {
     if (!isLoaded) return;
 
-    if (!emailAddress || !password) {
+    if (!emailAddress || !password ) {
       setDisable(true);
       // Alert.alert('Error', 'Please fill in all fields');
       return;
     }
-    if (!emailAddress.includes("@")) {
-      setDisable(true);
+        if (!emailAddress.includes('@')) {
+          setDisable(true)
       // Alert.alert('Error', 'Please enter a valid email address');
       return;
     }
@@ -78,6 +83,14 @@ export default function LoginScreen() {
     }
   };
 
+  // 🔹 Navigate to sign-up
+  const handleSignUp = () => {
+    router.push("/(auth)/sign-up");
+  };
+  const handleBack = () => {
+    router.back();
+  };
+
   return (
     <SafeScreen>
       <StatusBar barStyle="dark-content" />
@@ -86,47 +99,45 @@ export default function LoginScreen() {
         style={styles.keyboardView}
       >
         <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <View style={styles.container}>
-            <Text style={styles.title}>
-              Welcome back, ready to get started?
-            </Text>
-            <TextInput
-              style={styles.input}
-              autoCapitalize="none"
-              value={name}
-              placeholder="Your name"
-              onChangeText={setname}
-            />
-            <TextInput
-              autoCapitalize="none"
-              value={emailAddress}
-              placeholder="Enter email"
-              onChangeText={setEmailAddress}
-              style={styles.input}
-            />
-
-            <TextInput
-              value={password}
-              placeholder="Enter password"
-              secureTextEntry
-              onChangeText={setPassword}
-              style={styles.input}
-            />
-
-            <TouchableOpacity
-              style={disable ? styles.disablebutton : styles.button}
-              onPress={onSignInPress}
-            >
-              <Text style={styles.buttonText}>Continue</Text>
-            </TouchableOpacity>
-
-            <View style={styles.footer}>
-              <Text style={styles.footerText}>{`Don't have an account?`} </Text>
-              <Link href="/sign-up">
-                <Text style={styles.footerLink}>Sign Up</Text>
-              </Link>
-            </View>
-          </View>
+          
+          
+                          
+              <View style={styles.container}>
+                <Text style={styles.title}>Ready to build your resume?</Text>
+                          <TextInput
+                            style={styles.input}
+                            autoCapitalize="none"
+                            value={name}
+                            placeholder="Your name"
+                            onChangeText={setname}
+                          />
+                <TextInput
+                  autoCapitalize="none"
+                  value={emailAddress}
+                  placeholder="Enter email"
+                  onChangeText={setEmailAddress}
+                  style={styles.input}
+                />
+          
+                <TextInput
+                  value={password}
+                  placeholder="Enter password"
+                  secureTextEntry
+                  onChangeText={setPassword}
+                  style={styles.input}
+                />
+          
+                <TouchableOpacity style={styles.button} onPress={onSignInPress}>
+                  <Text style={styles.buttonText}>Continue</Text>
+                </TouchableOpacity>
+          
+                <View style={styles.footer}>
+                  <Text style={styles.footerText}>{`Don't have an account?`} </Text>
+                  <Link href="/sign-up">
+                    <Text style={styles.footerLink}>Sign Up</Text>
+                  </Link>
+                </View>
+              </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeScreen>
@@ -142,29 +153,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 30,
     paddingHorizontal: 20,
-  },
-  scrollContainer: {
-    flexGrow: 1,
-  },
-  keyboardView: {
+  }, keyboardView: {
     flex: 1,
   },
   title: {
-    fontFamily: "PlayfairDisplayRegular",
+    fontFamily: "PlayfairDisplay",
     fontSize: 28,
     marginBottom: 20,
   },
   input: {
     borderBottomWidth: 1,
-    fontFamily: "PlayfairDisplayRegular",
+    fontFamily: "PlayfairDisplay",
     fontSize: 18,
     paddingVertical: 6,
-  },
-  disablebutton: {
-    backgroundColor: "gray",
-    padding: 14,
-    alignItems: "center",
-    opacity: 0.8,
   },
   button: {
     backgroundColor: "black",
