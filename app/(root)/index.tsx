@@ -92,12 +92,18 @@ export default function Index() {
     setFormData({ ...formData, education: updated });
   };
 
-  // 🔹 Add Languages
-  const addLanguage = (lang) => {
-    setFormData((prev) => ({
-      ...prev,
-      languages: [...prev.languages, lang],
-    }));
+  // 🔹 Add & Remove Languages
+  const handleLanguage = (lang) => {
+    setFormData((prev) => {
+      const alreadySelected = prev.languages.includes(lang);
+
+      return {
+        ...prev,
+        languages: alreadySelected
+          ? prev.languages.filter((item) => item !== lang) // remove if already selected
+          : [...prev.languages, lang], // add if not selected
+      };
+    });
   };
 
   // 🔹 Update Languages
@@ -107,21 +113,24 @@ export default function Index() {
     );
     setFormData({ ...formData, languages: updated });
   };
-  // 🔹 Add Skills
-  const addSkill = (skill) => {
-    setFormData((prev) => ({
-      ...prev,
-      skills: [...prev.skills, skill],
-    }));
-  };
 
-  // 🔹 Update Skills
-  const updateSkill = (index, value) => {
-    const updated = formData.skills.map((skill, i) =>
-      i === index ? value : skill
-    );
-    setFormData({ ...formData, skills: updated });
-  };
+// Your updateSkill function:
+const updateSkill = (category, skill) => {
+  setFormData((prev) => {
+    const currentSkills = prev.skills[category] || [];
+    const alreadySelected = currentSkills.includes(skill);
+    
+    return {
+      ...prev,
+      skills: {
+        ...prev.skills,
+        [category]: alreadySelected
+          ? currentSkills.filter((item) => item !== skill)
+          : [...currentSkills, skill],
+      }
+    };
+  });
+};
 
   // 🔹 Update Selected Template
   const updateSelectedTemplate = (value) => {
@@ -157,12 +166,17 @@ export default function Index() {
           //   updatePersonalInfo={updatePersonalInfo}
           //   nextStep={nextStep}
           // />
-          <ResumeOptions
+          // <ResumeOptions
+          //   nextStep={nextStep}
+          //   prevStep={prevStep}
+          //   updateSelectedTemplate={updateSelectedTemplate}
+          // />
+          <SkillsStep
+            data={formData}
+            updateSkill={updateSkill}
             nextStep={nextStep}
             prevStep={prevStep}
-            updateSelectedTemplate={updateSelectedTemplate}
           />
-          // <OnboardingScreen/>
         )}
 
         {step === 2 && (
@@ -189,8 +203,7 @@ export default function Index() {
         {step === 4 && (
           <LanguagesStep
             data={formData}
-            addLanguage={addLanguage}
-            updateLanguage={updateLanguage}
+            handleLanguage={handleLanguage}
             nextStep={nextStep}
             prevStep={prevStep}
           />
@@ -198,7 +211,6 @@ export default function Index() {
         {step === 5 && (
           <SkillsStep
             data={formData}
-            addSkill={addSkill}
             updateSkill={updateSkill}
             nextStep={nextStep}
             prevStep={prevStep}

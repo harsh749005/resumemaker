@@ -1213,3 +1213,45 @@ const styles = StyleSheet.create({
     fontFamily: "WorkSansRegular",
   },
 });
+
+
+
+// Languages
+
+ <ScrollView
+          style={styles.scrollView}
+          showsVerticalScrollIndicator={false}
+        >
+          {languages.map((lang, index) => (
+            <View key={index} style={styles.experienceCard}>
+              <View style={styles.experienceHeader}>
+                <Text style={styles.experienceTitle}>Language {index + 1}</Text>
+                {languages.length > 1 && (
+                  <TouchableOpacity
+                    style={styles.deleteButton}
+                    // onPress={() => handleRemoveExperience(index)}
+                  >
+                    <Text style={styles.deleteButtonText}>✕</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+              <TextInput
+                style={styles.input}
+                placeholder={`Language ${index + 1} *`}
+                placeholderTextColor="#a9a9a9"
+                value={lang}
+                onChangeText={(val) => updateLanguage(index, val)}
+              />
+            </View>
+          ))}
+
+          {/* Add Experience Button */}
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={handleaddLanguage}
+          >
+            <Text style={styles.addButtonIcon}>+</Text>
+            <Text style={styles.addButtonText}>ADD LANGUAGE</Text>
+          </TouchableOpacity>
+          {/* <Button title="➕ Add Language" onPress={() => addLanguage("")} /> */}
+        </ScrollView>
