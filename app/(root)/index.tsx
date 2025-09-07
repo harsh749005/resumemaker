@@ -17,7 +17,12 @@ export default function Index() {
     professional_summary: "",
     work_experience: [],
     education: [],
-    skills: [],
+      skills: {
+    languages: [],
+    frameworks: [],
+    tools: [],
+    databases: []
+  },
     certifications: [],
     languages: [],
     selected_template: "",
@@ -166,17 +171,12 @@ const updateSkill = (category, skill) => {
           //   updatePersonalInfo={updatePersonalInfo}
           //   nextStep={nextStep}
           // />
-          // <ResumeOptions
-          //   nextStep={nextStep}
-          //   prevStep={prevStep}
-          //   updateSelectedTemplate={updateSelectedTemplate}
-          // />
-          <SkillsStep
-            data={formData}
-            updateSkill={updateSkill}
+          <ResumeOptions
             nextStep={nextStep}
             prevStep={prevStep}
+            updateSelectedTemplate={updateSelectedTemplate}
           />
+
         )}
 
         {step === 2 && (
@@ -200,15 +200,15 @@ const updateSkill = (category, skill) => {
             prevStep={prevStep}
           />
         )}
-        {step === 4 && (
+        {/* {step === 4 && (
           <LanguagesStep
             data={formData}
             handleLanguage={handleLanguage}
             nextStep={nextStep}
             prevStep={prevStep}
           />
-        )}
-        {step === 5 && (
+        )} */}
+        {step === 4 && (
           <SkillsStep
             data={formData}
             updateSkill={updateSkill}
@@ -216,7 +216,7 @@ const updateSkill = (category, skill) => {
             prevStep={prevStep}
           />
         )}
-        {step === 6 && (
+        {/* {step === 6 && (
           <CertificationsStep
             data={formData}
             addCertification={addCertification}
@@ -224,9 +224,10 @@ const updateSkill = (category, skill) => {
             nextStep={nextStep}
             prevStep={prevStep}
           />
-        )}
+        )} */}
 
-        {step === 7 && (
+        {step === 5 && (
+          
           <SummaryStep
             data={formData}
             summary={formData.professional_summary}
@@ -236,14 +237,14 @@ const updateSkill = (category, skill) => {
           />
         )}
 
-        {step === 8 && (
+        {step === 6 && (
           <ResumeOptions
             nextStep={nextStep}
             prevStep={prevStep}
             updateSelectedTemplate={updateSelectedTemplate}
           />
         )}
-        {step === 9 && <ReviewStep data={formData} prevStep={prevStep} />}
+        {step === 7 && <ReviewStep data={formData} prevStep={prevStep} />}
       </View>
     </SafeScreen>
   );

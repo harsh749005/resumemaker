@@ -1,102 +1,419 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  StatusBar,
+  ScrollView,
+} from "react-native";
 import { callGeminiAPI } from "@/api/gemini";
+import CustomLoader from "./appcomp/CustomLoader";
 
 const SummaryStep = ({ data, summary, updateSummary, nextStep, prevStep }) => {
   const { personal_info, work_experience, education, skills } = data;
-  console.log(skills);
-
   const [isGenerating, setIsGenerating] = useState(false);
-  console.log("hi")
+
   const generateSummary = async () => {
-    // if (!personal_info?.name || !work_experience?.length) {
-      //   return;
-      // }
-      setIsGenerating(true);
-      console.log("function ke undar")
-      try {
-        if (summary.length === 0) {
-          const prompt = `Write a professional resume summary for ${
-            personal_info.full_name
-        }. 
+    setIsGenerating(true);
+    // for ${
+    //       personal_info.full_name
+    //     }. 
+    try {
+      if (summary.length === 0) {
+        const prompt = `Write a professional resume summary 
           Here's their work experience: ${JSON.stringify(work_experience.year)}
           Here's their education: ${JSON.stringify(education.degree)}
-          Here are their skills: ${JSON.stringify(skills)}
+          Here are their skills: ${JSON.stringify(
+            skills.languages
+          )}${JSON.stringify(skills.frameworks)}${JSON.stringify(
+          skills.tools
+        )}${JSON.stringify(skills.databases)}
           Create a compelling 2-3 sentence professional summary that highlights their key strengths and experience. Make it specific and impactful.`;
         const result = await callGeminiAPI(prompt);
-        console.log("Here is the prompt", prompt);
-        console.log("and Gemini", result);
         updateSummary(result);
-      } else if (summary.length > 5 ) {
-        console.log("ha bhai")
-const prompt = `Polish the following resume summary by fixing only grammar, punctuation, and readability issues. 
+      } else if (summary.length > 5) {
+        const prompt = `Polish the following resume summary by fixing only grammar, punctuation, and readability issues. 
 Do not shorten, expand, or provide multiple versions. 
 Return exactly one improved summary:
 
-"${summary}"`;        const result = await callGeminiAPI(prompt);
-        console.log("Here is the prompt", prompt);
-        console.log("and Gemini", result);
+"${summary}"`;
+        const result = await callGeminiAPI(prompt);
         updateSummary(result);
       }
     } catch (error) {
       console.error("Error generating summary:", error);
-    }
-    finally{
-
+    } finally {
       setIsGenerating(false);
     }
   };
+
   return (
-    <View style={{ gap: 12 }}>
-      <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-        Step 3: Professional Summary
-      </Text>
+    <>
+      <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
+      <View style={styles.container}>
+        <ScrollView
+          style={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ flexGrow: 1 }}
+        >
+          {/* Header Section */}
+          <View style={styles.header}>
+            <View style={styles.stepIndicator}>
+              <Text style={styles.stepText}>Step 3 of 4</Text>
+            </View>
+            <Text style={styles.title}>Professional Summary</Text>
+            <Text style={styles.subtitle}>
+              Create a compelling summary that highlights your key strengths,
+              experience, and career objectives
+            </Text>
+          </View>
 
-      <TextInput
-        style={{
-          borderWidth: 1,
-          borderColor: "#ccc",
-          borderRadius: 8,
-          padding: 10,
-          height: 120,
-          textAlignVertical: "top",
-        }}
-        placeholder="Write a short professional summary..."
-        value={summary}
-        onChangeText={updateSummary}
-        multiline
-      />
+          {/* Main Content */}
+          <View style={styles.contentSection}>
+            {/* Input Section */}
+            <View style={styles.inputSection}>
+              <Text style={styles.inputLabel}>Your Professional Summary</Text>
+              <View style={styles.inputContainer}>
+                <TextInput
+                  style={[
+                    styles.input,
+                    summary.length > 0 && styles.inputFilled,
+                  ]}
+                  placeholder="Write a compelling professional summary that showcases your expertise, achievements, and career goals..."
+                  placeholderTextColor="#a0a0a0"
+                  value={summary}
+                  onChangeText={updateSummary}
+                  multiline
+                  numberOfLines={6}
+                  textAlignVertical="top"
+                />
+                {summary.length > 0 && (
+                  <Text style={styles.characterCount}>
+                    {summary.length} characters
+                  </Text>
+                )}
+              </View>
+            </View>
 
-      <TouchableOpacity
-        onPress={
-          generateSummary
-        }
-        style={{
-          borderWidth: 1,
-          width: 100,
-          paddingVertical: 10,
-          paddingHorizontal: 8,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          borderRadius: 5,
-        }}
-      >
-        <Text>{isGenerating ? "Generating ..." : "Generate"}</Text>
-      </TouchableOpacity>
-      {/* Navigation */}
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          marginTop: 20,
-        }}
-      >
-        <Button title="Back" onPress={prevStep} />
-        <Button title="Next" onPress={nextStep} />
+            {/* AI Generate Button */}
+            <TouchableOpacity
+              onPress={generateSummary}
+              style={[
+                styles.generateButton,
+                isGenerating && styles.generateButtonLoading,
+              ]}
+              disabled={isGenerating}
+            >
+              {isGenerating ? (
+                <View style={styles.loadingContent}>
+                  <CustomLoader size={20} color="#ffffff" bars={12} />
+                  <Text style={styles.generateButtonTextLoading}>
+                    AI is crafting your summary...
+                  </Text>
+                </View>
+              ) : (
+                <View style={styles.generateContent}>
+                  <Text style={styles.generateIcon}>✨</Text>
+                  <Text style={styles.generateButtonText}>
+                    {summary.length === 0
+                      ? "Generate AI Summary"
+                      : "Polish with AI"}
+                  </Text>
+                </View>
+              )}
+            </TouchableOpacity>
+
+            {/* Tips Section */}
+            <View style={styles.tipsSection}>
+              <Text style={styles.tipsTitle}>💡 Pro Tips</Text>
+              <View style={styles.tipsList}>
+              <Text style={styles.tipItem}>
+                  • Based on your previous form details AI can generate summary
+                </Text>
+                <Text style={styles.tipItem}>
+                  • Keep it concise (2-3 sentences)
+                </Text>
+                <Text style={styles.tipItem}>
+                  • Highlight your most relevant experience
+                </Text>
+                <Text style={styles.tipItem}>
+                  • Include key skills and achievements
+                </Text>
+                <Text style={styles.tipItem}>
+                  • Tailor it to your target role
+                </Text>
+              </View>
+            </View>
+
+            {/* Preview Section */}
+            {summary.length > 0 && (
+              <View style={styles.previewSection}>
+                <Text style={styles.previewTitle}>Preview</Text>
+                <View style={styles.previewContainer}>
+                  <Text style={styles.previewText}>{summary}</Text>
+                </View>
+              </View>
+            )}
+          </View>
+        </ScrollView>
+
+        {/* Fixed Bottom Navigation */}
+        <View style={styles.bottomSection}>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={prevStep}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.backButtonText}>← Back</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.nextButton,
+                summary.length === 0 && styles.nextButtonDisabled,
+              ]}
+              onPress={nextStep}
+              disabled={summary.length === 0}
+              activeOpacity={0.8}
+            >
+              <Text
+                style={[
+                  styles.nextButtonText,
+                  summary.length === 0 && styles.nextButtonTextDisabled,
+                ]}
+              >
+                Next →
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
-    </View>
+    </>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#ffffff",
+  },
+  scrollContent: {
+    flex: 1,
+  },
+  header: {
+    paddingHorizontal: 24,
+    paddingTop: 20,
+    paddingBottom: 30,
+    alignItems: "center",
+  },
+  stepIndicator: {
+    backgroundColor: "#f0f8ff",
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+    // borderRadius: 20,
+    marginBottom: 16,
+  },
+  stepText: {
+    fontSize: 12,
+    fontFamily: "WorkSansMedium",
+    color: "#007AFF",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+  },
+  title: {
+    fontFamily: "PlayfairDisplayRegular",
+    fontSize: 32,
+    color: "#1a1a1a",
+    textAlign: "center",
+    marginBottom: 12,
+    lineHeight: 40,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: "#666666",
+    textAlign: "center",
+    lineHeight: 24,
+    paddingHorizontal: 20,
+    fontFamily: "WorkSansRegular",
+  },
+  contentSection: {
+    paddingHorizontal: 24,
+    paddingBottom: 120,
+  },
+  inputSection: {
+    marginBottom: 24,
+  },
+  inputLabel: {
+    fontSize: 18,
+    fontFamily: "WorkSansMedium",
+    color: "#1a1a1a",
+    marginBottom: 12,
+  },
+  inputContainer: {
+    position: "relative",
+  },
+  input: {
+    borderWidth: 2,
+    borderColor: "#e6e6e6",
+    // borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    fontSize: 16,
+    fontFamily: "WorkSansRegular",
+    color: "#1a1a1a",
+    minHeight: 120,
+    backgroundColor: "#fafafa",
+    lineHeight: 24,
+  },
+  inputFilled: {
+    borderColor: "#007AFF",
+    backgroundColor: "#ffffff",
+  },
+  characterCount: {
+    position: "absolute",
+    bottom: 8,
+    right: 12,
+    fontSize: 12,
+    color: "#999999",
+    fontFamily: "WorkSansRegular",
+  },
+  generateButton: {
+    backgroundColor: "#007AFF",
+    // borderRadius: 12,
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+    marginBottom: 32,
+    shadowColor: "#007AFF",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  generateButtonLoading: {
+    backgroundColor: "#5eb3ff",
+  },
+  generateContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  loadingContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  generateIcon: {
+    fontSize: 20,
+    marginRight: 8,
+  },
+  generateButtonText: {
+    color: "#ffffff",
+    fontSize: 16,
+    fontFamily: "WorkSansMedium",
+    textAlign: "center",
+  },
+  generateButtonTextLoading: {
+    color: "#ffffff",
+    fontSize: 16,
+    fontFamily: "WorkSansRegular",
+    textAlign: "center",
+    marginLeft: 12,
+  },
+  tipsSection: {
+    backgroundColor: "#f8f9fa",
+    // borderRadius: 12,
+    padding: 20,
+    marginBottom: 24,
+  },
+  tipsTitle: {
+    fontSize: 16,
+    fontFamily: "WorkSansMedium",
+    color: "#1a1a1a",
+    marginBottom: 12,
+  },
+  tipsList: {
+    gap: 8,
+  },
+  tipItem: {
+    fontSize: 14,
+    fontFamily: "WorkSansRegular",
+    color: "#666666",
+    lineHeight: 20,
+  },
+  previewSection: {
+    marginBottom: 24,
+  },
+  previewTitle: {
+    fontSize: 18,
+    fontFamily: "WorkSansMedium",
+    color: "#1a1a1a",
+    marginBottom: 12,
+  },
+  previewContainer: {
+    backgroundColor: "#ffffff",
+    borderWidth: 1,
+    borderColor: "#e6e6e6",
+    // borderRadius: 12,
+    padding: 16,
+  },
+  previewText: {
+    fontSize: 15,
+    fontFamily: "WorkSansRegular",
+    color: "#333333",
+    lineHeight: 22,
+  },
+  bottomSection: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "#ffffff",
+    paddingHorizontal: 24,
+    paddingTop: 16,
+    paddingBottom: 24,
+    // borderTopWidth: 1,
+    // borderTopColor: "#f0f0f0",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  backButton: {
+    backgroundColor: "#f5f5f5",
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    // borderRadius: 12,
+    minWidth: 100,
+  },
+  backButtonText: {
+    color: "#333333",
+    textAlign: "center",
+    fontSize: 16,
+    fontFamily: "WorkSansMedium",
+  },
+  nextButton: {
+    backgroundColor: "#000000",
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    // borderRadius: 12,
+    minWidth: 100,
+  },
+  nextButtonDisabled: {
+    backgroundColor: "#cccccc",
+  },
+  nextButtonText: {
+    color: "#ffffff",
+    textAlign: "center",
+    fontSize: 16,
+    fontFamily: "WorkSansMedium",
+  },
+  nextButtonTextDisabled: {
+    color: "#888888",
+  },
+});
 
 export default SummaryStep;

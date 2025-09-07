@@ -253,10 +253,10 @@ const tabs = [
         {/* Navigation Buttons */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.backButton} onPress={prevStep}>
-            <Text style={styles.backButtonText}>BACK</Text>
+            <Text style={styles.backButtonText}>← Back</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
-            <Text style={styles.nextButtonText}>NEXT</Text>
+            <Text style={styles.nextButtonText}>Next →</Text>
           </TouchableOpacity>
         </View>
 
