@@ -9,6 +9,7 @@ import WorkExperienceStep from "@/components/WorkExperience";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import SafeScreen from "@/components/appcomp/SafeScreen";
+import Projects from "@/components/Projects";
 
 export default function Index() {
   const [step, setStep] = useState(1);
@@ -16,6 +17,7 @@ export default function Index() {
     personal_info: {},
     professional_summary: "",
     work_experience: [],
+    projects:[],
     education: [],
       skills: {
     languages: [],
@@ -54,6 +56,25 @@ export default function Index() {
   const removeExperience = (index) => {
     const updated = formData.work_experience.filter((_, i) => i !== index);
     setFormData({ ...formData, work_experience: updated });
+  };
+  // add projects
+  const addProjects = (pro) => {
+    setFormData((prev)=>({
+      ...prev,
+      projects:[...prev.projects,pro],
+    }))
+  }
+  // update project
+  const updateProjects = (index,field,value) =>{
+    const updated = formData.projects.map((pro,i)=>
+      i === index ? {...pro, [field] : value } : pro
+    )
+    setFormData({ ...formData, projects: updated });
+  }
+    // Remove Exprerienc
+  const removeProjects = (index) => {
+    const updated = formData.projects.filter((_, i) => i !== index);
+    setFormData({ ...formData, projects: updated });
   };
 
   // 🔹 Update Summary
@@ -171,10 +192,18 @@ const updateSkill = (category, skill) => {
           //   updatePersonalInfo={updatePersonalInfo}
           //   nextStep={nextStep}
           // />
-          <ResumeOptions
-            nextStep={nextStep}
-            prevStep={prevStep}
-            updateSelectedTemplate={updateSelectedTemplate}
+          // <ResumeOptions
+          //   nextStep={nextStep}
+          //   prevStep={prevStep}
+          //   updateSelectedTemplate={updateSelectedTemplate}
+          // />
+          <Projects
+          data={formData}
+          addProjects={addProjects}
+          updateProjects={updateProjects}
+          removeProjects={removeProjects}
+          nextStep={nextStep}
+          prevStep={prevStep}
           />
 
         )}
@@ -237,14 +266,14 @@ const updateSkill = (category, skill) => {
           />
         )}
 
-        {step === 6 && (
+        {/* {step === 6 && (
           <ResumeOptions
             nextStep={nextStep}
             prevStep={prevStep}
             updateSelectedTemplate={updateSelectedTemplate}
           />
-        )}
-        {step === 7 && <ReviewStep data={formData} prevStep={prevStep} />}
+        )} */}
+        {step === 6 && <ReviewStep data={formData} prevStep={prevStep} />}
       </View>
     </SafeScreen>
   );

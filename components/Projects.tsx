@@ -14,15 +14,15 @@ import {
 import { callGeminiAPI } from "@/api/gemini";
 import CustomLoader from "./appcomp/CustomLoader";
 
-const WorkExperienceStep = ({
+const ProjectStep = ({
   data,
-  addExperience,
-  updateExperience,
-  removeExperience,
+  addProjects,
+  updateProjects,
+  removeProjects,
   nextStep,
   prevStep,
 }) => {
-  const workExperience = data.work_experience || [];
+  const projectExperience = data.projects || [];
   const [date, setDate] = useState(new Date());
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatingIndex, setGeneratingIndex] = useState(null); // Track which experience is being generated
@@ -48,7 +48,7 @@ const WorkExperienceStep = ({
     const currentDate = selectedDate || date;
     setDate(currentDate);
 
-    updateExperience(
+    updateProjects(
       showPicker.index,
       showPicker.field,
       formattedMonthYear(currentDate)
@@ -58,20 +58,20 @@ const WorkExperienceStep = ({
   };
 
   const handleNext = () => {
-    if (workExperience.length === 0) {
+    if (projectExperience.length === 0) {
       Alert.alert(
-        "Add Work Experience",
+        "Add Work Project",
         "Please add at least one work experience to continue",
         [{ text: "OK" }]
       );
       return;
     }
 
-    const incompleteExperiences = workExperience.some(
-      (exp) => !exp.company || !exp.role
+    const incompleteProjects = projectExperience.some(
+      (pro) => !pro.title || !pro.description
     );
 
-    if (incompleteExperiences) {
+    if (incompleteProjects) {
       Alert.alert(
         "Complete Required Fields",
         "Please fill in Company and Role for all experiences",
@@ -83,36 +83,32 @@ const WorkExperienceStep = ({
     nextStep();
   };
 
-  const handleAddExperience = () => {
-    addExperience({
-      company: "",
-      role: "",
-      year: "",
-      start: "",
-      end: "",
-      experience: ""
+  const handleAddProject = () => {
+    addProjects({
+        title:"",
+        description:""
     });
   };
 
-  const handleRemoveExperience = (index) => {
-    if (workExperience.length === 1) {
+  const handleRemoveProject = (index) => {
+    if (projectExperience.length === 1) {
       Alert.alert(
         "Cannot Remove",
-        "You need at least one work experience entry",
+        "You need at least one project entry",
         [{ text: "OK" }]
       );
       return;
     }
 
     Alert.alert(
-      "Remove Experience",
-      "Are you sure you want to remove this work experience?",
+      "Remove Project",
+      "Are you sure you want to remove this project details?",
       [
         { text: "Cancel", style: "cancel" },
         {
           text: "Remove",
           style: "destructive",
-          onPress: () => removeExperience(index),
+          onPress: () => removeProjects(index),
         },
       ]
     );
@@ -120,35 +116,38 @@ const WorkExperienceStep = ({
 
   // Fixed generateSummary function with index parameter
   const generateSummary = async (index) => {
-    const experience = workExperience[index];
-    
-    if (!experience || !experience.experience || experience.experience.length <= 5) {
-      Alert.alert(
-        "Not enough content",
-        "Please write at least a few words about your experience before polishing it.",
-        [{ text: "OK" }]
-      );
-      return;
+    const proj = projectExperience[index];
+    console.log(proj.title.length)
+    if (!proj || !proj.title || proj.description.length <= 5) {
+        Alert.alert(
+            "Not enough content",
+            "Please write at least a few words about your project before polishing it.",
+            [{ text: "OK" }]
+        );
+        return;
     }
-
+    
+    console.log("hi")
     setIsGenerating(true);
     setGeneratingIndex(index);
     
     try {
-      const prompt = `Polish the following work experience description by improving grammar, punctuation, readability, and incorporating relevant technical terms where appropriate. 
-Do not shorten , no headings or  expand the overall meaning beyond the original context. 
-Return the polished version strictly as 4 clear and concise bullet points:
+      const prompt = `Polish the following project description by improving grammar, punctuation, readability, and incorporating relevant technical terms where appropriate. 
+Format the response strictly as 5 clear and concise bullet points, starting each point with a strong action verb (e.g., Built, Developed, Implemented, Designed, Optimized). 
+Ensure the points highlight technical impact and include relevant technologies or methodologies when suitable. 
+Do not expand or change the overall meaning beyond the original context.
 
-"${experience.experience}"`;
+"${proj.description}"`;
 
       
       const result = await callGeminiAPI(prompt);
-      updateExperience(index, "experience", result);
+      console.log(result)
+      updateProjects(index, "description", result);
     } catch (error) {
       console.error("Error generating summary:", error);
       Alert.alert(
         "Error",
-        "Failed to polish the experience description. Please try again.",
+        "Failed to polish the project description. Please try again.",
         [{ text: "OK" }]
       );
     } finally {
@@ -162,7 +161,7 @@ Return the polished version strictly as 4 clear and concise bullet points:
       <StatusBar barStyle="dark-content" />
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.title}>Work Experience</Text>
+          <Text style={styles.title}>Project Experience</Text>
           <Text style={styles.subtitle}>
             Tell us about your professional background
           </Text>
@@ -172,16 +171,16 @@ Return the polished version strictly as 4 clear and concise bullet points:
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}
         >
-          {workExperience.map((exp, index) => (
+          {projectExperience.map((exp, index) => (
             <View key={index} style={styles.experienceCard}>
               <View style={styles.experienceHeader}>
                 <Text style={styles.experienceTitle}>
-                  Experience {index + 1}
+                  Project {index + 1}
                 </Text>
-                {workExperience.length > 1 && (
+                {projectExperience.length > 1 && (
                   <TouchableOpacity
                     style={styles.deleteButton}
-                    onPress={() => handleRemoveExperience(index)}
+                    onPress={() => handleRemoveProject(index)}
                   >
                     <Text style={styles.deleteButtonText}>✕</Text>
                   </TouchableOpacity>
@@ -190,37 +189,22 @@ Return the polished version strictly as 4 clear and concise bullet points:
 
               <TextInput
                 style={styles.input}
-                placeholder="Company *"
+                placeholder="Title *"
                 placeholderTextColor="#a9a9a9"
-                value={exp.company || ""}
-                onChangeText={(val) => updateExperience(index, "company", val)}
+                value={exp.title || ""}
+                onChangeText={(val) => updateProjects(index, "title", val)}
               />
 
-              <TextInput
-                style={styles.input}
-                placeholder="Role *"
-                placeholderTextColor="#a9a9a9"
-                value={exp.role || ""}
-                onChangeText={(val) => updateExperience(index, "role", val)}
-              />
-
-              <TextInput
-                style={styles.input}
-                placeholder="Years of experience (e.g., 2 years)"
-                placeholderTextColor="#a9a9a9"
-                value={exp.year || ""}
-                onChangeText={(val) => updateExperience(index, "year", val)}
-              />
 
               <TextInput
                 style={[styles.input, styles.multilineInput]}
-                placeholder="Write a few words about your experience *"
+                placeholder="Write a few words about your description *"
                 placeholderTextColor="#a9a9a9"
-                value={exp.experience || ""}
+                value={exp.description || ""}
                 multiline
                 numberOfLines={4}
                 textAlignVertical="top"
-                onChangeText={(val) => updateExperience(index, "experience", val)}
+                onChangeText={(val) => updateProjects(index, "description", val)}
               />
 
               {/* Polish Button */}
@@ -250,7 +234,7 @@ Return the polished version strictly as 4 clear and concise bullet points:
               </TouchableOpacity>
 
               {/* Start Date */}
-              <View style={styles.dateSection}>
+              {/* <View style={styles.dateSection}>
                 <Text style={styles.dateLabel}>
                   Start Date: {exp.start || "Not selected"}
                 </Text>
@@ -262,10 +246,10 @@ Return the polished version strictly as 4 clear and concise bullet points:
                 >
                   <Text style={styles.dateButtonText}>PICK START DATE</Text>
                 </TouchableOpacity>
-              </View>
+              </View> */}
 
               {/* End Date */}
-              <View style={styles.dateSection}>
+              {/* <View style={styles.dateSection}>
                 <Text style={styles.dateLabel}>
                   End Date: {exp.end || "Not selected"}
                 </Text>
@@ -300,29 +284,29 @@ Return the polished version strictly as 4 clear and concise bullet points:
                   />
                   <Text style={styles.switchLabel}>Currently working here</Text>
                 </View>
-              </View>
+              </View> */}
             </View>
           ))}
 
           {/* Add Experience Button */}
           <TouchableOpacity
             style={styles.addButton}
-            onPress={handleAddExperience}
+            onPress={handleAddProject}
           >
             <Text style={styles.addButtonIcon}>+</Text>
-            <Text style={styles.addButtonText}>ADD WORK EXPERIENCE</Text>
+            <Text style={styles.addButtonText}>ADD PROJECT</Text>
           </TouchableOpacity>
         </ScrollView>
 
         {/* Date Picker */}
-        {showPicker.visible && (
+        {/* {showPicker.visible && (
           <DateTimePicker
             value={date}
             mode="date"
             display="spinner"
             onChange={onChange}
           />
-        )}
+        )} */}
 
         {/* Navigation Buttons */}
         <View style={styles.buttonContainer}>
@@ -342,8 +326,6 @@ Return the polished version strictly as 4 clear and concise bullet points:
     </>
   );
 };
-
-export default WorkExperienceStep;
 
 const styles = StyleSheet.create({
   container: {
@@ -600,3 +582,4 @@ const styles = StyleSheet.create({
     fontFamily: "WorkSansRegular",
   },
 });
+export default ProjectStep;

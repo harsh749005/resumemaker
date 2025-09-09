@@ -3,7 +3,16 @@ export function fillTemplate(template, formData) {
     .replace("{{name}}", formData.personal_info.name || "")
     .replace("{{email}}", formData.personal_info.email || "")
     .replace("{{summary}}", formData.professional_summary || "")
-    .replace("{{skills}}", formData.skills.join(", "))
+    .replace(
+      "{{skills}}",
+      Object.entries(formData.skills)
+        .map(([category, skills]) =>
+          skills.length > 0
+            ? `<p><strong>${category}:</strong> ${skills.join(", ")}</p>`
+            : ""
+        )
+        .join("")
+    )
     .replace(
       "{{experience}}",
       formData.work_experience

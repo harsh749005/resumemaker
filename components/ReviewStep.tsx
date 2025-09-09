@@ -3,14 +3,14 @@ import { View, Text, Button, ScrollView } from "react-native";
 import { generatePDF } from "./GeneratePDF";
 const ReviewStep = ({ data, prevStep }) => {
   const handleSubmit = async () => {
-    try{
+    try {
       console.log("Final Form Data:", data);
       alert("Form Submitted Successfully!");
       const pdfPath = await generatePDF(data);
-       alert(`PDF saved at: ${pdfPath}`);
+      alert(`PDF saved at: ${pdfPath}`);
       // Here you can also open/share the PDF if you want
-    }catch(err){
-            console.error("Error generating PDF:", err);
+    } catch (err) {
+      console.error("Error generating PDF:", err);
       alert("Something went wrong while generating the PDF.");
     }
   };
@@ -45,8 +45,13 @@ const ReviewStep = ({ data, prevStep }) => {
         </View>
       ))}
       <Text style={{ fontWeight: "bold", marginTop: 10 }}>Skills</Text>
-      {data.skills.map((skill, i) => (
-        <Text key={i}>{skill}</Text>
+      {Object.entries(data.skills).map(([category, skills], i) => (
+        <View key={i} style={{ marginTop: 5 }}>
+          <Text style={{ fontWeight: "600" }}>{category}</Text>
+          {skills.map((skill, j) => (
+            <Text key={j}>• {skill}</Text>
+          ))}
+        </View>
       ))}
 
       <Text style={{ fontWeight: "bold", marginTop: 10 }}>Certifications</Text>
@@ -63,12 +68,18 @@ const ReviewStep = ({ data, prevStep }) => {
       </Text>
       <Text>{data.professional_summary}</Text>
       {/* Selected Template */}
-      <Text style={{ fontWeight: "bold", marginTop: 10 }}>Selected Template</Text>
+      <Text style={{ fontWeight: "bold", marginTop: 10 }}>
+        Selected Template
+      </Text>
       <Text>{data.selected_template}</Text>
 
       {/* Navigation */}
       <View
-        style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 20 }}
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          marginTop: 20,
+        }}
       >
         <Button title="Back" onPress={prevStep} />
         <Button title="Submit & Generate PDF" onPress={handleSubmit} />
