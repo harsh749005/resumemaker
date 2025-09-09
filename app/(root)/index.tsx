@@ -8,6 +8,7 @@ import SafeScreen from "@/components/appcomp/SafeScreen";
 import Projects from "@/components/Projects";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
+import PersonalInfoStep from "@/components/PersonalInfoStep";
 
 export default function Index() {
   const [step, setStep] = useState(1);
@@ -23,8 +24,8 @@ export default function Index() {
       tools: string[];
       databases: string[];
     };
-    certifications: string[];
-    languages: string[];
+    // certifications: string[];
+    // languages: string[];
     selected_template: string;
   }>({
     personal_info: {},
@@ -38,18 +39,18 @@ export default function Index() {
       tools: [],
       databases: [],
     },
-    certifications: [],
-    languages: [],
+    // certifications: [],
+    // languages: [],
     selected_template: "",
   });
 
   // 🔹 Update Personal Info (nested object)
-  // const updatePersonalInfo = (field:string, value:string) => {
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     personal_info: { ...prev.personal_info, [field]: value },
-  //   }));
-  // };
+  const updatePersonalInfo = (field: string, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      personal_info: { ...prev.personal_info, [field]: value },
+    }));
+  };
 
   // 🔹 Add Work Experience
   const addWorkExperience = (exp: any) => {
@@ -205,20 +206,23 @@ export default function Index() {
         {/* Step Counter */}
         {/* <Text style={{ fontSize: 18, marginBottom: 10 }}>Step {step}/9</Text> */}
 
-        {step === 7 && (
-          // <PersonalInfoStep
-          //   data={formData.personal_info}
-          //   updatePersonalInfo={updatePersonalInfo}
-          //   nextStep={nextStep}
-          // />
+        {step === 1 && (
           <ResumeOptions
             nextStep={nextStep}
-            prevStep={prevStep}
             updateSelectedTemplate={updateSelectedTemplate}
           />
         )}
 
         {step === 2 && (
+          <PersonalInfoStep
+            data={formData.personal_info}
+            updatePersonalInfo={updatePersonalInfo}
+            prevStep={prevStep}
+            nextStep={nextStep}
+          />
+        )}
+
+        {step === 3 && (
           <EducationStep
             data={formData}
             addEducation={addEducation}
@@ -228,8 +232,13 @@ export default function Index() {
             prevStep={prevStep}
           />
         )}
-
-        {step === 3 && (
+        {step === 4 && (
+          // <LanguagesStep
+          //   data={formData}
+          //   handleLanguage={handleLanguage}
+          //   nextStep={nextStep}
+          //   prevStep={prevStep}
+          // />
           <SkillsStep
             data={formData}
             updateSkill={updateSkill}
@@ -237,15 +246,7 @@ export default function Index() {
             prevStep={prevStep}
           />
         )}
-        {/* {step === 4 && (
-          <LanguagesStep
-            data={formData}
-            handleLanguage={handleLanguage}
-            nextStep={nextStep}
-            prevStep={prevStep}
-          />
-        )} */}
-        {step === 4 && (
+        {step === 5 && (
           <Projects
             data={formData}
             addProjects={addProjects}
@@ -255,7 +256,7 @@ export default function Index() {
             prevStep={prevStep}
           />
         )}
-        {step === 5 && (
+        {step === 6 && (
           // <CertificationsStep
           //   data={formData}
           //   addCertification={addCertification}
@@ -273,7 +274,7 @@ export default function Index() {
           />
         )}
 
-        {step === 6 && (
+        {step === 7 && (
           <SummaryStep
             data={formData}
             summary={formData.professional_summary}
@@ -290,7 +291,7 @@ export default function Index() {
             updateSelectedTemplate={updateSelectedTemplate}
           />
         )} */}
-        {step === 1 && <ReviewStep data={formData} prevStep={prevStep} />}
+        {step === 8 && <ReviewStep data={formData} prevStep={prevStep} />}
       </View>
     </SafeScreen>
   );

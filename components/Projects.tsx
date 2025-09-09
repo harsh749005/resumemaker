@@ -122,7 +122,6 @@ const ProjectStep: React.FC<ProjectStepProps> = ({
   // Fixed generateSummary function with index parameter
   const generateSummary = async (index: any) => {
     const proj = projectExperience[index];
-    console.log(proj.title.length);
     if (!proj || !proj.title || proj.description.length <= 5) {
       Alert.alert(
         "Not enough content",
@@ -131,8 +130,6 @@ const ProjectStep: React.FC<ProjectStepProps> = ({
       );
       return;
     }
-
-    console.log("hi");
     setIsGenerating(true);
     setGeneratingIndex(index);
 

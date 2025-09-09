@@ -441,3 +441,154 @@ const styles = StyleSheet.create({
 });
 
 export default LanguagesStep;
+
+
+
+
+
+
+
+import { useUser } from "@clerk/clerk-expo";
+
+const fillTemplate = (template, formData) => {
+  // Get user data from Clerk
+  const { user } = useUser();
+  
+  // Helper function to safely get nested properties
+  const getSafeValue = (obj, path, defaultValue = "") => {
+    return path.split('.').reduce((current, key) => {
+      return current && current[key] !== undefined ? current[key] : defaultValue;
+    }, obj);
+  };
+
+  // Get personal info with fallbacks
+  const getName = () => {
+    return getSafeValue(formData, 'personal_info.name') || 
+           user?.firstName + ' ' + user?.lastName || 
+           user?.username || 
+           "";
+  };
+
+  const getEmail = () => {
+    return getSafeValue(formData, 'personal_info.email') || 
+           user?.emailAddresses?.[0]?.emailAddress || 
+           "";
+  };
+
+  // Generate skills HTML
+  const generateSkillsHTML = () => {
+    if (!formData.skills || typeof formData.skills !== 'object') {
+      return "";
+    }
+    
+    return Object.entries(formData.skills)
+      .filter(([category, skills]) => Array.isArray(skills) && skills.length > 0)
+      .map(([category, skills]) => 
+        `<p><strong>${category}:</strong> ${skills.join(", ")}</p>`
+      )
+      .join("");
+  };
+
+  // Generate experience HTML
+  const generateExperienceHTML = () => {
+    if (!Array.isArray(formData.work_experience)) {
+      return "";
+    }
+    
+    return formData.work_experience
+      .map(exp => {
+        const role = exp.role || "Position";
+        const company = exp.company || "Company";
+        
+        // Handle different date formats
+        let duration = "";
+        if (exp.start && exp.end) {
+          duration = `${exp.start} - ${exp.end}`;
+        } else if (exp.years) {
+          duration = exp.years;
+        } else if (exp.start) {
+          duration = `${exp.start} - Present`;
+        }
+        
+        const durationText = duration ? ` (${duration})` : "";
+        
+        let html = `<li><strong>${role}</strong> at ${company}${durationText}`;
+        
+        // Add description if available
+        if (exp.description) {
+          html += `<br><em>${exp.description}</em>`;
+        }
+        
+        html += `</li>`;
+        return html;
+      })
+      .join("");
+  };
+
+  // Generate education HTML
+  const generateEducationHTML = () => {
+    if (!Array.isArray(formData.education)) {
+      return "";
+    }
+    
+    return formData.education
+      .map(edu => {
+        const degree = edu.degree || "Degree";
+        const institution = edu.institution || edu.school || "Institution";
+        const field = edu.field ? ` in ${edu.field}` : "";
+        
+        // Handle different date formats
+        let year = "";
+        if (edu.graduation_year || edu.year) {
+          year = ` (${edu.graduation_year || edu.year})`;
+        } else if (edu.start && edu.end) {
+          year = ` (${edu.start} - ${edu.end})`;
+        }
+        
+        // Add CGPA if available
+        const cgpa = edu.cgpa ? ` - CGPA: ${edu.cgpa}` : "";
+        
+        return `<li>${degree}${field} - ${institution}${year}${cgpa}</li>`;
+      })
+      .join("");
+  };
+
+  // Generate certifications HTML
+  const generateCertificationsHTML = () => {
+    if (!Array.isArray(formData.certifications)) {
+      return "";
+    }
+    
+    return formData.certifications
+      .filter(cert => cert && cert.trim() !== "")
+      .map(cert => `<li>${cert}</li>`)
+      .join("");
+  };
+
+  // Generate languages HTML
+  const generateLanguagesHTML = () => {
+    if (!Array.isArray(formData.languages)) {
+      return "";
+    }
+    
+    return formData.languages
+      .filter(lang => lang && lang.trim() !== "")
+      .map(lang => `<li>${lang}</li>`)
+      .join("");
+  };
+
+  // Replace all placeholders in the template
+  return template
+    .replace(/\{\{name\}\}/g, getName())
+    .replace(/\{\{email\}\}/g, getEmail())
+    .replace(/\{\{phone\}\}/g, getSafeValue(formData, 'personal_info.phone'))
+    .replace(/\{\{address\}\}/g, getSafeValue(formData, 'personal_info.address'))
+    .replace(/\{\{summary\}\}/g, formData.professional_summary || "")
+    .replace(/\{\{skills\}\}/g, generateSkillsHTML())
+    .replace(/\{\{experience\}\}/g, generateExperienceHTML())
+    .replace(/\{\{education\}\}/g, generateEducationHTML())
+    .replace(/\{\{certifications\}\}/g, generateCertificationsHTML())
+    .replace(/\{\{languages\}\}/g, generateLanguagesHTML());
+};
+
+export default fillTemplate;

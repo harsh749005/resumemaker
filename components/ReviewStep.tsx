@@ -148,7 +148,7 @@ const ReviewStep: React.FC<ReviewStepProps> = ({ data, prevStep }) => {
           </View>
 
           {/* Certifications Section */}
-          <View style={styles.sectionCard}>
+          {/* <View style={styles.sectionCard}>
             <Text style={styles.sectionTitle}>Certifications</Text>
             {data.certifications.map((cert: string, i: number) => (
               <View key={i} style={styles.certificateItem}>
@@ -156,10 +156,10 @@ const ReviewStep: React.FC<ReviewStepProps> = ({ data, prevStep }) => {
                 <Text style={styles.certificateText}>{cert}</Text>
               </View>
             ))}
-          </View>
+          </View> */}
 
           {/* Languages Section */}
-          <View style={styles.sectionCard}>
+          {/* <View style={styles.sectionCard}>
             <Text style={styles.sectionTitle}>Languages</Text>
             {data.languages.map((lang: string, i: number) => (
               <View key={i} style={styles.languageItem}>
@@ -167,7 +167,7 @@ const ReviewStep: React.FC<ReviewStepProps> = ({ data, prevStep }) => {
                 <Text style={styles.languageText}>{lang}</Text>
               </View>
             ))}
-          </View>
+          </View> */}
 
           {/* Professional Summary Section */}
           <View style={styles.sectionCard}>
@@ -180,12 +180,12 @@ const ReviewStep: React.FC<ReviewStepProps> = ({ data, prevStep }) => {
           </View>
 
           {/* Selected Template Section */}
-          <View style={styles.sectionCard}>
+          {/* <View style={styles.sectionCard}>
             <Text style={styles.sectionTitle}>Selected Template</Text>
             <View style={styles.templateContainer}>
               <Text style={styles.templateName}>{data.selected_template}</Text>
             </View>
-          </View>
+          </View> */}
         </ScrollView>
 
         {/* Navigation Buttons */}
