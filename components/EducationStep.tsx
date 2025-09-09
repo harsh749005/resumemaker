@@ -11,8 +11,15 @@ import {
   Alert,
   Switch,
 } from "react-native";
-
-const EducationStep = ({
+interface EducationStepProps {
+  data: any;
+  addEducation: any;
+  updateEducation: any;
+  removeEducationExperience: any;
+  nextStep: () => void;
+  prevStep: () => void;
+}
+const EducationStep: React.FC<EducationStepProps> = ({
   data,
   addEducation,
   updateEducation,
@@ -22,19 +29,19 @@ const EducationStep = ({
 }) => {
   const education = data.education || [];
   const [date, setDate] = useState(new Date());
-  const [showPicker, setShowPicker] = useState({
+  const [showPicker, setShowPicker] = useState<any>({
     visible: false,
     field: null,
     index: null,
   });
-  const formattedMonthYear = (currentDate) => {
+  const formattedMonthYear = (currentDate: any) => {
     return currentDate.toLocaleDateString("en-US", {
       month: "short",
       year: "numeric",
     });
   };
 
-  const onChange = (event, selectedDate) => {
+  const onChange = (event: any, selectedDate: any) => {
     if (event.type === "dismissed") {
       setShowPicker({ visible: false, field: null, index: null });
       return;
@@ -64,7 +71,7 @@ const EducationStep = ({
 
     // Validate required fields
     const incompleteEducation = education.some(
-      (edu) => !edu.institution || !edu.degree || edu.result
+      (edu: any) => !edu.institution || !edu.degree || edu.result
     );
 
     if (incompleteEducation) {
@@ -87,7 +94,7 @@ const EducationStep = ({
     });
   };
 
-  const handleRemoveExperience = (index) => {
+  const handleRemoveExperience = (index: number) => {
     if (education.length === 1) {
       Alert.alert(
         "Cannot Remove",
@@ -116,6 +123,10 @@ const EducationStep = ({
       <StatusBar barStyle="dark-content" />
       <View style={styles.container}>
         <View style={styles.header}>
+          {/* Progress Indicator */}
+          {/* <View style={styles.stepIndicator}>
+            <Text style={styles.stepText}>Step 3 of 4</Text>
+          </View> */}
           <Text style={styles.title}>Education</Text>
           <Text style={styles.subtitle}>
             Tell us about your education background
@@ -126,7 +137,7 @@ const EducationStep = ({
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}
         >
-          {education.map((edu, index) => (
+          {education.map((edu: any, index: number) => (
             <View key={index} style={styles.card}>
               <View style={styles.secondaryHeader}>
                 <Text style={styles.secondaryTitle}>
@@ -250,11 +261,6 @@ const EducationStep = ({
             <Text style={styles.nextButtonText}>Next →</Text>
           </TouchableOpacity>
         </View>
-
-        {/* Progress Indicator */}
-        <View style={styles.progressContainer}>
-          <Text style={styles.progressText}>Step 3 of 4</Text>
-        </View>
       </View>
     </>
   );
@@ -274,7 +280,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 20,
   },
-
+  stepIndicator: {
+    backgroundColor: "#f0f8ff",
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+    // borderRadius: 20,
+    marginBottom: 16,
+  },
+  stepText: {
+    fontSize: 12,
+    fontFamily: "WorkSansMedium",
+    color: "#007AFF",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+  },
   title: {
     fontFamily: "PlayfairDisplayRegular",
     fontSize: 28,

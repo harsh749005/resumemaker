@@ -10,46 +10,106 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import Entypo from '@expo/vector-icons/Entypo';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-const SkillsStep = ({
+import Entypo from "@expo/vector-icons/Entypo";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+interface SkillsStepProps {
+  data: any;
+  updateSkill: any;
+  nextStep: () => void;
+  prevStep: () => void;
+}
+const SkillsStep: React.FC<SkillsStepProps> = ({
   data,
   updateSkill,
   nextStep,
   prevStep,
 }) => {
-  const [activeTab, setActiveTab] = useState('languages');
+  const [activeTab, setActiveTab] = useState("languages");
   const [inputText, setInputText] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   // Get current skills based on active tab
   const getCurrentSkills = () => data.skills?.[activeTab] || [];
 
-const tabs = [
-  { key: 'languages', label: 'Languages', icon: <Entypo name="code" size={16} color="black" /> },
-  { key: 'frameworks', label: 'Frameworks', icon: <MaterialIcons name="web" size={16} color="black" /> },
-  { key: 'tools', label: 'Tools', icon: <Entypo name="tools" size={16} color="black" /> },
-  { key: 'databases', label: 'Databases', icon: <MaterialIcons name="storage" size={16} color="black" /> }
-];
+  const tabs = [
+    {
+      key: "languages",
+      label: "Languages",
+      icon: <Entypo name="code" size={16} color="black" />,
+    },
+    {
+      key: "frameworks",
+      label: "Frameworks",
+      icon: <MaterialIcons name="web" size={16} color="black" />,
+    },
+    {
+      key: "tools",
+      label: "Tools",
+      icon: <Entypo name="tools" size={16} color="black" />,
+    },
+    {
+      key: "databases",
+      label: "Databases",
+      icon: <MaterialIcons name="storage" size={16} color="black" />,
+    },
+  ];
 
   // Categorized technologies
-  const technologiesByCategory = {
+  const technologiesByCategory: any = {
     languages: [
-      "JavaScript", "Python", "Java", "TypeScript", "PHP", "C++", "C#", 
-      "Ruby", "Go", "Swift", "Kotlin", "Rust", "Dart", "Scala"
+      "JavaScript",
+      "Python",
+      "Java",
+      "TypeScript",
+      "PHP",
+      "C++",
+      "C#",
+      "Ruby",
+      "Go",
+      "Swift",
+      "Kotlin",
+      "Rust",
+      "Dart",
+      "Scala",
     ],
     frameworks: [
-      "React", "Vue.js", "Angular", "Node.js", "Express.js", "Next.js", 
-      "Django", "Flask", "Spring Boot", "Laravel", "React Native", "Flutter"
+      "React",
+      "Vue.js",
+      "Angular",
+      "Node.js",
+      "Express.js",
+      "Next.js",
+      "Django",
+      "Flask",
+      "Spring Boot",
+      "Laravel",
+      "React Native",
+      "Flutter",
     ],
     tools: [
-      "Git", "Docker", "Webpack", "Vite", "Jenkins", "GitHub Actions", 
-      "Postman", "VS Code", "IntelliJ", "Figma", "Photoshop"
+      "Git",
+      "Docker",
+      "Webpack",
+      "Vite",
+      "Jenkins",
+      "GitHub Actions",
+      "Postman",
+      "VS Code",
+      "IntelliJ",
+      "Figma",
+      "Photoshop",
     ],
     databases: [
-      "MySQL", "PostgreSQL", "MongoDB", "Redis", "SQLite", 
-      "Firebase", "Oracle", "Cassandra", "DynamoDB"
-    ]
+      "MySQL",
+      "PostgreSQL",
+      "MongoDB",
+      "Redis",
+      "SQLite",
+      "Firebase",
+      "Oracle",
+      "Cassandra",
+      "DynamoDB",
+    ],
   };
 
   const allTechnologies = technologiesByCategory[activeTab] || [];
@@ -68,17 +128,17 @@ const tabs = [
   };
 
   const filteredSuggestions = allTechnologies.filter(
-    (tech) =>
+    (tech: string) =>
       tech.toLowerCase().includes(inputText.toLowerCase()) &&
       !currentSkills.includes(tech)
   );
 
-  const handleInputChange = (text) => {
+  const handleInputChange = (text: string) => {
     setInputText(text);
     setShowSuggestions(text.length > 0);
   };
 
-  const handleAddSkill = (skill) => {
+  const handleAddSkill = (skill: any) => {
     updateSkill(activeTab, skill);
     setInputText("");
     setShowSuggestions(false);
@@ -90,9 +150,9 @@ const tabs = [
     }
   };
 
-  const getTabTitle = (tab) => {
-  const count = data.skills?.[tab.key]?.length || 0;
-  return `${tab.label}${count > 0 ? ` (${count})` : ''}`;
+  const getTabTitle = (tab: any) => {
+    const count = data.skills?.[tab.key]?.length || 0;
+    return `${tab.label}${count > 0 ? ` (${count})` : ""}`;
   };
 
   return (
@@ -100,6 +160,10 @@ const tabs = [
       <StatusBar barStyle="dark-content" />
       <View style={styles.container}>
         <View style={styles.header}>
+          {/* Progress Indicator */}
+          {/* <View style={styles.stepIndicator}>
+            <Text style={styles.stepText}>Step 3 of 4</Text>
+          </View> */}
           <Text style={styles.title}>Technical Skills</Text>
           <Text style={styles.subtitle}>
             Add your programming languages, frameworks, tools, and databases
@@ -112,28 +176,29 @@ const tabs = [
             {tabs.map((tab) => (
               <TouchableOpacity
                 key={tab.key}
-                style={[
-                  styles.tab,
-                  activeTab === tab.key && styles.activeTab
-                ]}
+                style={[styles.tab, activeTab === tab.key && styles.activeTab]}
                 onPress={() => {
                   setActiveTab(tab.key);
                   setInputText("");
                   setShowSuggestions(false);
                 }}
               >
-                <Text style={[
-                  styles.tabText,
-                  activeTab === tab.key && styles.activeTabText,
-                  {}
-                ]}>
+                <Text
+                  style={[
+                    styles.tabText,
+                    activeTab === tab.key && styles.activeTabText,
+                    {},
+                  ]}
+                >
                   {tab.icon}
                 </Text>
-              <Text style={[
-                  styles.tabText,
-                  activeTab === tab.key && styles.activeTabText,
-                  {}
-                ]}>
+                <Text
+                  style={[
+                    styles.tabText,
+                    activeTab === tab.key && styles.activeTabText,
+                    {},
+                  ]}
+                >
                   {getTabTitle(tab)}
                 </Text>
               </TouchableOpacity>
@@ -145,7 +210,9 @@ const tabs = [
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
-            placeholder={`Add ${tabs.find(t => t.key === activeTab)?.label.toLowerCase()}...`}
+            placeholder={`Add ${tabs
+              .find((t) => t.key === activeTab)
+              ?.label.toLowerCase()}...`}
             value={inputText}
             onChangeText={handleInputChange}
             onSubmitEditing={handleManualAdd}
@@ -162,27 +229,33 @@ const tabs = [
           <View style={styles.suggestionsContainer}>
             <Text style={styles.suggestionsTitle}>Suggestions:</Text>
             <ScrollView style={styles.suggestionsScroll} nestedScrollEnabled>
-              {filteredSuggestions.slice(0, 8).map((tech, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={styles.suggestionItem}
-                  onPress={() => handleAddSkill(tech)}
-                >
-                  <Text style={styles.suggestionText}>{tech}</Text>
-                </TouchableOpacity>
-              ))}
+              {filteredSuggestions
+                .slice(0, 8)
+                .map((tech: string, index: number) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={styles.suggestionItem}
+                    onPress={() => handleAddSkill(tech)}
+                  >
+                    <Text style={styles.suggestionText}>{tech}</Text>
+                  </TouchableOpacity>
+                ))}
             </ScrollView>
           </View>
         )}
 
-        <ScrollView style={styles.contentScroll} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          style={styles.contentScroll}
+          showsVerticalScrollIndicator={false}
+        >
           {/* Selected Skills for Current Tab */}
           <View style={styles.selectedSection}>
             <Text style={styles.sectionTitle}>
-              Selected {tabs.find(t => t.key === activeTab)?.label} ({currentSkills.length})
+              Selected {tabs.find((t) => t.key === activeTab)?.label} (
+              {currentSkills.length})
             </Text>
             <View style={styles.selectedContainer}>
-              {currentSkills.map((skill, index) => (
+              {currentSkills.map((skill: string, index: number) => (
                 <View key={index} style={styles.selectedTag}>
                   <Text style={styles.selectedTagText}>{skill}</Text>
                   <TouchableOpacity
@@ -195,7 +268,9 @@ const tabs = [
               ))}
               {currentSkills.length === 0 && (
                 <Text style={styles.emptyText}>
-                  No {tabs.find(t => t.key === activeTab)?.label.toLowerCase()} selected yet.
+                  No{" "}
+                  {tabs.find((t) => t.key === activeTab)?.label.toLowerCase()}{" "}
+                  selected yet.
                 </Text>
               )}
             </View>
@@ -204,49 +279,65 @@ const tabs = [
           {/* Popular for Current Category */}
           <View style={styles.popularSection}>
             <Text style={styles.sectionTitle}>
-              Popular {tabs.find(t => t.key === activeTab)?.label}
+              Popular {tabs.find((t) => t.key === activeTab)?.label}
             </Text>
             <View style={styles.skillsContainer}>
-              {allTechnologies.slice(0, 8).map((skill, index) => (
-                <Pressable
-                  key={index}
-                  style={[
-                    styles.skillOption,
-                    currentSkills.includes(skill) && styles.selectedSkillOption
-                  ]}
-                  onPress={() => handleAddSkill(skill)}
-                >
-                  <Text style={[
-                    styles.skillText,
-                    currentSkills.includes(skill) && styles.selectedSkillText
-                  ]}>
-                    {skill} {currentSkills.includes(skill) && '✓'}
-                  </Text>
-                </Pressable>
-              ))}
+              {allTechnologies
+                .slice(0, 8)
+                .map((skill: string, index: number) => (
+                  <Pressable
+                    key={index}
+                    style={[
+                      styles.skillOption,
+                      currentSkills.includes(skill) &&
+                        styles.selectedSkillOption,
+                    ]}
+                    onPress={() => handleAddSkill(skill)}
+                  >
+                    <Text
+                      style={[
+                        styles.skillText,
+                        currentSkills.includes(skill) &&
+                          styles.selectedSkillText,
+                      ]}
+                    >
+                      {skill} {currentSkills.includes(skill) && "✓"}
+                    </Text>
+                  </Pressable>
+                ))}
             </View>
           </View>
 
           {/* All Selected Skills Summary */}
           <View style={styles.summarySection}>
             <Text style={styles.summaryTitle}>All Selected Skills</Text>
-            {Object.entries(data.skills || {}).map(([category, skills]) => (
-              skills.length > 0 && (
-                <View key={category} style={styles.summaryCategory}>
-                <View style={{flexDirection:"row", alignItems:"center",gap:8}}>
-                <Text style={styles.summaryCategoryTitle}>
-                    {tabs.find(t => t.key === category)?.icon} 
-                  </Text>
-                  <Text style={styles.summaryCategoryTitle}>
-                     {tabs.find(t => t.key === category)?.label} ({skills.length})
-                  </Text>
+            {Object.entries(data.skills || {}).map(([category, skills]) => {
+              const typedSkills = skills as string[];
+              return (
+                typedSkills.length > 0 && (
+                  <View key={category} style={styles.summaryCategory}>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 8,
+                      }}
+                    >
+                      <Text style={styles.summaryCategoryTitle}>
+                        {tabs.find((t) => t.key === category)?.icon}
+                      </Text>
+                      <Text style={styles.summaryCategoryTitle}>
+                        {tabs.find((t) => t.key === category)?.label} (
+                        {typedSkills.length})
+                      </Text>
+                    </View>
+                    <Text style={styles.summarySkills}>
+                      {typedSkills.join(", ")}
+                    </Text>
                   </View>
-                  <Text style={styles.summarySkills}>
-                    {skills.join(', ')}
-                  </Text>
-                </View>
-              )
-            ))}
+                )
+              );
+            })}
           </View>
         </ScrollView>
 
@@ -261,9 +352,9 @@ const tabs = [
         </View>
 
         {/* Progress Indicator */}
-        <View style={styles.progressContainer}>
+        {/* <View style={styles.progressContainer}>
           <Text style={styles.progressText}>Step 3 of 4</Text>
-        </View>
+        </View> */}
       </View>
     </>
   );
@@ -279,6 +370,20 @@ const styles = StyleSheet.create({
   header: {
     alignItems: "center",
     marginBottom: 20,
+  },
+  stepIndicator: {
+    backgroundColor: "#f0f8ff",
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+    // borderRadius: 20,
+    marginBottom: 16,
+  },
+  stepText: {
+    fontSize: 12,
+    fontFamily: "WorkSansMedium",
+    color: "#007AFF",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
   },
   title: {
     fontFamily: "PlayfairDisplayRegular",
@@ -303,9 +408,9 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginRight: 10,
     backgroundColor: "#f0f0f0",
-    flexDirection:"row",
-    alignItems:"center",
-    gap:10
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
     // borderRadius: 20,
   },
   activeTab: {

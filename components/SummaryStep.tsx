@@ -10,16 +10,28 @@ import {
 } from "react-native";
 import { callGeminiAPI } from "@/api/gemini";
 import CustomLoader from "./appcomp/CustomLoader";
-
-const SummaryStep = ({ data, summary, updateSummary, nextStep, prevStep }) => {
-  const { personal_info, work_experience, education, skills } = data;
+interface SummaryStepProps {
+  data: any;
+  summary: any;
+  updateSummary: any;
+  nextStep: () => void;
+  prevStep: () => void;
+}
+const SummaryStep: React.FC<SummaryStepProps> = ({
+  data,
+  summary,
+  updateSummary,
+  nextStep,
+  prevStep,
+}) => {
+  const { projects, work_experience, education, skills } = data;
   const [isGenerating, setIsGenerating] = useState(false);
 
   const generateSummary = async () => {
     setIsGenerating(true);
     // for ${
     //       personal_info.full_name
-    //     }. 
+    //     }.
     try {
       if (summary.length === 0) {
         const prompt = `Write a professional resume summary 
@@ -60,9 +72,9 @@ Return exactly one improved summary:
         >
           {/* Header Section */}
           <View style={styles.header}>
-            <View style={styles.stepIndicator}>
+            {/* <View style={styles.stepIndicator}>
               <Text style={styles.stepText}>Step 3 of 4</Text>
-            </View>
+            </View> */}
             <Text style={styles.title}>Professional Summary</Text>
             <Text style={styles.subtitle}>
               Create a compelling summary that highlights your key strengths,
@@ -129,7 +141,7 @@ Return exactly one improved summary:
             <View style={styles.tipsSection}>
               <Text style={styles.tipsTitle}>💡 Pro Tips</Text>
               <View style={styles.tipsList}>
-              <Text style={styles.tipItem}>
+                <Text style={styles.tipItem}>
                   • Based on your previous form details AI can generate summary
                 </Text>
                 <Text style={styles.tipItem}>
@@ -159,36 +171,14 @@ Return exactly one improved summary:
           </View>
         </ScrollView>
 
-        {/* Fixed Bottom Navigation */}
-        <View style={styles.bottomSection}>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={styles.backButton}
-              onPress={prevStep}
-              activeOpacity={0.8}
-            >
-              <Text style={styles.backButtonText}>← Back</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[
-                styles.nextButton,
-                summary.length === 0 && styles.nextButtonDisabled,
-              ]}
-              onPress={nextStep}
-              disabled={summary.length === 0}
-              activeOpacity={0.8}
-            >
-              <Text
-                style={[
-                  styles.nextButtonText,
-                  summary.length === 0 && styles.nextButtonTextDisabled,
-                ]}
-              >
-                Next →
-              </Text>
-            </TouchableOpacity>
-          </View>
+        {/* Navigation Buttons */}
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.backButton} onPress={prevStep}>
+            <Text style={styles.backButtonText}>← Back</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.nextButton} onPress={nextStep}>
+            <Text style={styles.nextButtonText}>Next →</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </>
@@ -198,16 +188,16 @@ Return exactly one improved summary:
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingHorizontal: 20,
+    paddingTop: 20,
     backgroundColor: "#ffffff",
   },
   scrollContent: {
     flex: 1,
   },
   header: {
-    paddingHorizontal: 24,
-    paddingTop: 20,
-    paddingBottom: 30,
     alignItems: "center",
+    marginBottom: 20,
   },
   stepIndicator: {
     backgroundColor: "#f0f8ff",
@@ -225,22 +215,21 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: "PlayfairDisplayRegular",
-    fontSize: 32,
-    color: "#1a1a1a",
+    fontSize: 28,
+    color: "#333333",
     textAlign: "center",
-    marginBottom: 12,
-    lineHeight: 40,
+    marginBottom: 10,
   },
   subtitle: {
     fontSize: 16,
-    color: "#666666",
+    color: "#a9a9a9",
     textAlign: "center",
     lineHeight: 24,
     paddingHorizontal: 20,
     fontFamily: "WorkSansRegular",
   },
   contentSection: {
-    paddingHorizontal: 24,
+    // paddingHorizontal: 24,
     paddingBottom: 120,
   },
   inputSection: {
@@ -365,54 +354,39 @@ const styles = StyleSheet.create({
     color: "#333333",
     lineHeight: 22,
   },
-  bottomSection: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: "#ffffff",
-    paddingHorizontal: 24,
-    paddingTop: 16,
-    paddingBottom: 24,
-    // borderTopWidth: 1,
-    // borderTopColor: "#f0f0f0",
-  },
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+    marginTop: 20,
+    marginBottom: 10,
   },
+
   backButton: {
-    backgroundColor: "#f5f5f5",
-    paddingVertical: 14,
-    paddingHorizontal: 24,
-    // borderRadius: 12,
+    backgroundColor: "#f0f0f0",
+    paddingVertical: 12,
+    paddingHorizontal: 30,
     minWidth: 100,
   },
+
   backButtonText: {
-    color: "#333333",
+    color: "#333",
     textAlign: "center",
     fontSize: 16,
     fontFamily: "WorkSansMedium",
   },
+
   nextButton: {
     backgroundColor: "#000000",
-    paddingVertical: 14,
-    paddingHorizontal: 24,
-    // borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 30,
     minWidth: 100,
   },
-  nextButtonDisabled: {
-    backgroundColor: "#cccccc",
-  },
+
   nextButtonText: {
-    color: "#ffffff",
+    color: "white",
     textAlign: "center",
     fontSize: 16,
     fontFamily: "WorkSansMedium",
-  },
-  nextButtonTextDisabled: {
-    color: "#888888",
   },
 });
 

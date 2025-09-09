@@ -13,8 +13,15 @@ import {
 } from "react-native";
 import { callGeminiAPI } from "@/api/gemini";
 import CustomLoader from "./appcomp/CustomLoader";
-
-const WorkExperienceStep = ({
+interface WorkExperienceStepProps {
+  data: any;
+  addExperience: any;
+  updateExperience: any;
+  removeExperience: any;
+  nextStep: () => void;
+  prevStep: () => void;
+}
+const WorkExperienceStep: React.FC<WorkExperienceStepProps> = ({
   data,
   addExperience,
   updateExperience,
@@ -26,20 +33,20 @@ const WorkExperienceStep = ({
   const [date, setDate] = useState(new Date());
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatingIndex, setGeneratingIndex] = useState(null); // Track which experience is being generated
-  const [showPicker, setShowPicker] = useState({
+  const [showPicker, setShowPicker] = useState<any>({
     visible: false,
     field: null,
     index: null,
   });
 
-  const formattedMonthYear = (currentDate) => {
+  const formattedMonthYear = (currentDate: any) => {
     return currentDate.toLocaleDateString("en-US", {
       month: "short",
       year: "numeric",
     });
   };
 
-  const onChange = (event, selectedDate) => {
+  const onChange = (event: any, selectedDate: any) => {
     if (event.type === "dismissed") {
       setShowPicker({ visible: false, field: null, index: null });
       return;
@@ -68,7 +75,7 @@ const WorkExperienceStep = ({
     }
 
     const incompleteExperiences = workExperience.some(
-      (exp) => !exp.company || !exp.role
+      (exp: any) => !exp.company || !exp.role
     );
 
     if (incompleteExperiences) {
@@ -90,11 +97,11 @@ const WorkExperienceStep = ({
       year: "",
       start: "",
       end: "",
-      experience: ""
+      experience: "",
     });
   };
 
-  const handleRemoveExperience = (index) => {
+  const handleRemoveExperience = (index: number) => {
     if (workExperience.length === 1) {
       Alert.alert(
         "Cannot Remove",
@@ -119,10 +126,14 @@ const WorkExperienceStep = ({
   };
 
   // Fixed generateSummary function with index parameter
-  const generateSummary = async (index) => {
+  const generateSummary = async (index: any) => {
     const experience = workExperience[index];
-    
-    if (!experience || !experience.experience || experience.experience.length <= 5) {
+
+    if (
+      !experience ||
+      !experience.experience ||
+      experience.experience.length <= 5
+    ) {
       Alert.alert(
         "Not enough content",
         "Please write at least a few words about your experience before polishing it.",
@@ -133,7 +144,7 @@ const WorkExperienceStep = ({
 
     setIsGenerating(true);
     setGeneratingIndex(index);
-    
+
     try {
       const prompt = `Polish the following work experience description by improving grammar, punctuation, readability, and incorporating relevant technical terms where appropriate. 
 Do not shorten , no headings or  expand the overall meaning beyond the original context. 
@@ -141,7 +152,6 @@ Return the polished version strictly as 4 clear and concise bullet points:
 
 "${experience.experience}"`;
 
-      
       const result = await callGeminiAPI(prompt);
       updateExperience(index, "experience", result);
     } catch (error) {
@@ -162,6 +172,10 @@ Return the polished version strictly as 4 clear and concise bullet points:
       <StatusBar barStyle="dark-content" />
       <View style={styles.container}>
         <View style={styles.header}>
+          {/* Progress Indicator */}
+          {/* <View style={styles.stepIndicator}>
+            <Text style={styles.stepText}>Step 3 of 4</Text>
+          </View> */}
           <Text style={styles.title}>Work Experience</Text>
           <Text style={styles.subtitle}>
             Tell us about your professional background
@@ -172,7 +186,7 @@ Return the polished version strictly as 4 clear and concise bullet points:
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}
         >
-          {workExperience.map((exp, index) => (
+          {workExperience.map((exp: any, index: number) => (
             <View key={index} style={styles.experienceCard}>
               <View style={styles.experienceHeader}>
                 <Text style={styles.experienceTitle}>
@@ -220,19 +234,23 @@ Return the polished version strictly as 4 clear and concise bullet points:
                 multiline
                 numberOfLines={4}
                 textAlignVertical="top"
-                onChangeText={(val) => updateExperience(index, "experience", val)}
+                onChangeText={(val) =>
+                  updateExperience(index, "experience", val)
+                }
               />
 
               {/* Polish Button */}
               <TouchableOpacity
                 style={[
                   styles.polishButton,
-                  (isGenerating && generatingIndex === index) && styles.polishButtonLoading
+                  isGenerating &&
+                    generatingIndex === index &&
+                    styles.polishButtonLoading,
                 ]}
                 onPress={() => generateSummary(index)}
                 disabled={isGenerating && generatingIndex === index}
               >
-                {(isGenerating && generatingIndex === index) ? (
+                {isGenerating && generatingIndex === index ? (
                   <View style={styles.loadingContent}>
                     <CustomLoader size={16} color="#ffffff" bars={8} />
                     <Text style={styles.polishButtonTextLoading}>
@@ -242,9 +260,7 @@ Return the polished version strictly as 4 clear and concise bullet points:
                 ) : (
                   <View style={styles.polishContent}>
                     <Text style={styles.polishIcon}>✨</Text>
-                    <Text style={styles.polishButtonText}>
-                      Polish with AI
-                    </Text>
+                    <Text style={styles.polishButtonText}>Polish with AI</Text>
                   </View>
                 )}
               </TouchableOpacity>
@@ -333,11 +349,6 @@ Return the polished version strictly as 4 clear and concise bullet points:
             <Text style={styles.nextButtonText}>Next →</Text>
           </TouchableOpacity>
         </View>
-
-        {/* Progress Indicator */}
-        <View style={styles.progressContainer}>
-          <Text style={styles.progressText}>Step 3 of 4</Text>
-        </View>
       </View>
     </>
   );
@@ -356,6 +367,21 @@ const styles = StyleSheet.create({
   header: {
     alignItems: "center",
     marginBottom: 20,
+  },
+
+  stepIndicator: {
+    backgroundColor: "#f0f8ff",
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+    // borderRadius: 20,
+    marginBottom: 16,
+  },
+  stepText: {
+    fontSize: 12,
+    fontFamily: "WorkSansMedium",
+    color: "#007AFF",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
   },
 
   title: {
@@ -587,16 +613,5 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 16,
     fontFamily: "WorkSansMedium",
-  },
-
-  progressContainer: {
-    alignItems: "center",
-    marginBottom: 20,
-  },
-
-  progressText: {
-    fontSize: 14,
-    color: "#999999",
-    fontFamily: "WorkSansRegular",
   },
 });

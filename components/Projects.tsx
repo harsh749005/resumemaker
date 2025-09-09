@@ -1,11 +1,11 @@
-import DateTimePicker from "@react-native-community/datetimepicker";
+// import DateTimePicker from "@react-native-community/datetimepicker";
 import React, { useState } from "react";
 import {
   Alert,
   ScrollView,
   StatusBar,
   StyleSheet,
-  Switch,
+  // Switch,
   Text,
   TextInput,
   TouchableOpacity,
@@ -13,8 +13,15 @@ import {
 } from "react-native";
 import { callGeminiAPI } from "@/api/gemini";
 import CustomLoader from "./appcomp/CustomLoader";
-
-const ProjectStep = ({
+interface ProjectStepProps {
+  data: any;
+  addProjects: any;
+  updateProjects: any;
+  removeProjects: any;
+  nextStep: () => void;
+  prevStep: () => void;
+}
+const ProjectStep: React.FC<ProjectStepProps> = ({
   data,
   addProjects,
   updateProjects,
@@ -23,39 +30,39 @@ const ProjectStep = ({
   prevStep,
 }) => {
   const projectExperience = data.projects || [];
-  const [date, setDate] = useState(new Date());
+  // const [date, setDate] = useState(new Date());
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatingIndex, setGeneratingIndex] = useState(null); // Track which experience is being generated
-  const [showPicker, setShowPicker] = useState({
-    visible: false,
-    field: null,
-    index: null,
-  });
+  // const [showPicker, setShowPicker] = useState<any>({
+  //   visible: false,
+  //   field: null,
+  //   index: null,
+  // });
 
-  const formattedMonthYear = (currentDate) => {
-    return currentDate.toLocaleDateString("en-US", {
-      month: "short",
-      year: "numeric",
-    });
-  };
+  // const formattedMonthYear = (currentDate: any) => {
+  //   return currentDate.toLocaleDateString("en-US", {
+  //     month: "short",
+  //     year: "numeric",
+  //   });
+  // };
 
-  const onChange = (event, selectedDate) => {
-    if (event.type === "dismissed") {
-      setShowPicker({ visible: false, field: null, index: null });
-      return;
-    }
+  // const onChange = (event: any, selectedDate: any) => {
+  //   if (event.type === "dismissed") {
+  //     setShowPicker({ visible: false, field: null, index: null });
+  //     return;
+  //   }
 
-    const currentDate = selectedDate || date;
-    setDate(currentDate);
+  //   const currentDate = selectedDate || date;
+  //   setDate(currentDate);
 
-    updateProjects(
-      showPicker.index,
-      showPicker.field,
-      formattedMonthYear(currentDate)
-    );
+  //   updateProjects(
+  //     showPicker.index,
+  //     showPicker.field,
+  //     formattedMonthYear(currentDate)
+  //   );
 
-    setShowPicker({ visible: false, field: null, index: null });
-  };
+  //   setShowPicker({ visible: false, field: null, index: null });
+  // };
 
   const handleNext = () => {
     if (projectExperience.length === 0) {
@@ -68,7 +75,7 @@ const ProjectStep = ({
     }
 
     const incompleteProjects = projectExperience.some(
-      (pro) => !pro.title || !pro.description
+      (pro: any) => !pro.title || !pro.description
     );
 
     if (incompleteProjects) {
@@ -85,18 +92,16 @@ const ProjectStep = ({
 
   const handleAddProject = () => {
     addProjects({
-        title:"",
-        description:""
+      title: "",
+      description: "",
     });
   };
 
-  const handleRemoveProject = (index) => {
+  const handleRemoveProject = (index: number) => {
     if (projectExperience.length === 1) {
-      Alert.alert(
-        "Cannot Remove",
-        "You need at least one project entry",
-        [{ text: "OK" }]
-      );
+      Alert.alert("Cannot Remove", "You need at least one project entry", [
+        { text: "OK" },
+      ]);
       return;
     }
 
@@ -115,22 +120,22 @@ const ProjectStep = ({
   };
 
   // Fixed generateSummary function with index parameter
-  const generateSummary = async (index) => {
+  const generateSummary = async (index: any) => {
     const proj = projectExperience[index];
-    console.log(proj.title.length)
+    console.log(proj.title.length);
     if (!proj || !proj.title || proj.description.length <= 5) {
-        Alert.alert(
-            "Not enough content",
-            "Please write at least a few words about your project before polishing it.",
-            [{ text: "OK" }]
-        );
-        return;
+      Alert.alert(
+        "Not enough content",
+        "Please write at least a few words about your project before polishing it.",
+        [{ text: "OK" }]
+      );
+      return;
     }
-    
-    console.log("hi")
+
+    console.log("hi");
     setIsGenerating(true);
     setGeneratingIndex(index);
-    
+
     try {
       const prompt = `Polish the following project description by improving grammar, punctuation, readability, and incorporating relevant technical terms where appropriate. 
 Format the response strictly as 5 clear and concise bullet points, starting each point with a strong action verb (e.g., Built, Developed, Implemented, Designed, Optimized). 
@@ -139,9 +144,8 @@ Do not expand or change the overall meaning beyond the original context.
 
 "${proj.description}"`;
 
-      
       const result = await callGeminiAPI(prompt);
-      console.log(result)
+      console.log(result);
       updateProjects(index, "description", result);
     } catch (error) {
       console.error("Error generating summary:", error);
@@ -161,6 +165,9 @@ Do not expand or change the overall meaning beyond the original context.
       <StatusBar barStyle="dark-content" />
       <View style={styles.container}>
         <View style={styles.header}>
+          {/* <View style={styles.stepIndicator}>
+            <Text style={styles.stepText}>Step 3 of 4</Text>
+          </View> */}
           <Text style={styles.title}>Project Experience</Text>
           <Text style={styles.subtitle}>
             Tell us about your professional background
@@ -171,12 +178,10 @@ Do not expand or change the overall meaning beyond the original context.
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}
         >
-          {projectExperience.map((exp, index) => (
+          {projectExperience.map((exp: any, index: number) => (
             <View key={index} style={styles.experienceCard}>
               <View style={styles.experienceHeader}>
-                <Text style={styles.experienceTitle}>
-                  Project {index + 1}
-                </Text>
+                <Text style={styles.experienceTitle}>Project {index + 1}</Text>
                 {projectExperience.length > 1 && (
                   <TouchableOpacity
                     style={styles.deleteButton}
@@ -195,7 +200,6 @@ Do not expand or change the overall meaning beyond the original context.
                 onChangeText={(val) => updateProjects(index, "title", val)}
               />
 
-
               <TextInput
                 style={[styles.input, styles.multilineInput]}
                 placeholder="Write a few words about your description *"
@@ -204,19 +208,23 @@ Do not expand or change the overall meaning beyond the original context.
                 multiline
                 numberOfLines={4}
                 textAlignVertical="top"
-                onChangeText={(val) => updateProjects(index, "description", val)}
+                onChangeText={(val) =>
+                  updateProjects(index, "description", val)
+                }
               />
 
               {/* Polish Button */}
               <TouchableOpacity
                 style={[
                   styles.polishButton,
-                  (isGenerating && generatingIndex === index) && styles.polishButtonLoading
+                  isGenerating &&
+                    generatingIndex === index &&
+                    styles.polishButtonLoading,
                 ]}
                 onPress={() => generateSummary(index)}
                 disabled={isGenerating && generatingIndex === index}
               >
-                {(isGenerating && generatingIndex === index) ? (
+                {isGenerating && generatingIndex === index ? (
                   <View style={styles.loadingContent}>
                     <CustomLoader size={16} color="#ffffff" bars={8} />
                     <Text style={styles.polishButtonTextLoading}>
@@ -226,9 +234,7 @@ Do not expand or change the overall meaning beyond the original context.
                 ) : (
                   <View style={styles.polishContent}>
                     <Text style={styles.polishIcon}>✨</Text>
-                    <Text style={styles.polishButtonText}>
-                      Polish with AI
-                    </Text>
+                    <Text style={styles.polishButtonText}>Polish with AI</Text>
                   </View>
                 )}
               </TouchableOpacity>
@@ -289,10 +295,7 @@ Do not expand or change the overall meaning beyond the original context.
           ))}
 
           {/* Add Experience Button */}
-          <TouchableOpacity
-            style={styles.addButton}
-            onPress={handleAddProject}
-          >
+          <TouchableOpacity style={styles.addButton} onPress={handleAddProject}>
             <Text style={styles.addButtonIcon}>+</Text>
             <Text style={styles.addButtonText}>ADD PROJECT</Text>
           </TouchableOpacity>
@@ -319,9 +322,9 @@ Do not expand or change the overall meaning beyond the original context.
         </View>
 
         {/* Progress Indicator */}
-        <View style={styles.progressContainer}>
+        {/* <View style={styles.progressContainer}>
           <Text style={styles.progressText}>Step 3 of 4</Text>
-        </View>
+        </View> */}
       </View>
     </>
   );
@@ -338,6 +341,20 @@ const styles = StyleSheet.create({
   header: {
     alignItems: "center",
     marginBottom: 20,
+  },
+  stepIndicator: {
+    backgroundColor: "#f0f8ff",
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+    // borderRadius: 20,
+    marginBottom: 16,
+  },
+  stepText: {
+    fontSize: 12,
+    fontFamily: "WorkSansMedium",
+    color: "#007AFF",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
   },
 
   title: {

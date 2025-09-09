@@ -1,7 +1,6 @@
+import React, { useState } from "react";
 import {
   Alert,
-  Button,
-  Dimensions,
   Image,
   ScrollView,
   StatusBar,
@@ -10,15 +9,19 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState } from "react";
 
 // ✅ Direct imports
 import resume1 from "../assets/images/resume/resume1.png";
 import resume2 from "../assets/images/resume/resume2.jpg";
 import resume3 from "../assets/images/resume/resume3.jpg";
-import SafeScreen from "./appcomp/SafeScreen";
-
-const ResumeOptions = ({ nextStep, prevStep, updateSelectedTemplate }) => {
+interface ResumeOptionsProps {
+  nextStep: () => void;
+  updateSelectedTemplate: (template: string) => void;
+}
+const ResumeOptions: React.FC<ResumeOptionsProps> = ({
+  nextStep,
+  updateSelectedTemplate,
+}) => {
   const resumeTemplates = [resume1, resume2, resume3];
   const templateNames = ["Professional", "Modern", "Creative"];
   const templateFeatures = [
@@ -30,7 +33,7 @@ const ResumeOptions = ({ nextStep, prevStep, updateSelectedTemplate }) => {
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleTemplateSelect = (index) => {
+  const handleTemplateSelect = (index: any) => {
     setSelectedTemplate(index);
     updateSelectedTemplate(index);
   };
@@ -60,6 +63,10 @@ const ResumeOptions = ({ nextStep, prevStep, updateSelectedTemplate }) => {
       <StatusBar barStyle="dark-content" />
       <View style={styles.container}>
         <View style={styles.header}>
+          {/* Progress Indicator */}
+          {/* <View style={styles.stepIndicator}>
+            <Text style={styles.stepText}>Step 3 of 4</Text>
+          </View> */}
           <Text style={styles.title}>Resume Templates</Text>
           <Text style={styles.subtitle}>
             Find the perfect design for your professional profile
@@ -137,11 +144,6 @@ const ResumeOptions = ({ nextStep, prevStep, updateSelectedTemplate }) => {
             </Text>
           </TouchableOpacity>
         </View>
-
-        {/* Progress Indicator */}
-        <View style={styles.progressContainer}>
-          <Text style={styles.progressText}>Step 2 of 4</Text>
-        </View>
       </View>
     </>
   );
@@ -160,6 +162,20 @@ const styles = StyleSheet.create({
   header: {
     alignItems: "center",
     marginBottom: 30,
+  },
+  stepIndicator: {
+    backgroundColor: "#f0f8ff",
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+    // borderRadius: 20,
+    marginBottom: 16,
+  },
+  stepText: {
+    fontSize: 12,
+    fontFamily: "WorkSansMedium",
+    color: "#007AFF",
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
   },
 
   title: {
