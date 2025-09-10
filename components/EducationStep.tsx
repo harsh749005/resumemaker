@@ -71,7 +71,7 @@ const EducationStep: React.FC<EducationStepProps> = ({
 
     // Validate required fields
     const incompleteEducation = education.some(
-      (edu: any) => !edu.institution || !edu.degree || edu.result
+      (edu: any) => !edu.institution || !edu.degree || !edu.result
     );
 
     if (incompleteEducation) {
@@ -169,8 +169,8 @@ const EducationStep: React.FC<EducationStepProps> = ({
               <TextInput
                 style={styles.input}
                 placeholder="cgpa/10 or percentage *"
-                value={edu.cgpa || ""}
-                onChangeText={(val) => updateEducation(index, "cgpa", val)}
+                value={edu.result || ""}
+                onChangeText={(val) => updateEducation(index, "result", val)}
               />
 
               {/* Start Date */}

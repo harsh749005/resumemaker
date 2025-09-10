@@ -1,51 +1,91 @@
 export function fillTemplate(template, formData) {
-  const formatSkills = () => {
-    const skillsArray = [];
-    
-    // Programming Languages
-    if (formData.skills?.languages?.length > 0) {
-      skillsArray.push(`<strong>Programming Languages:</strong> ${formData.skills.languages.join(', ')}`);
-    }
-    
-    // Web Development (combine frameworks and tools)
-    const webDevSkills = [
-      ...(formData.skills?.frameworks || []),
-      ...(formData.skills?.tools || [])
-    ];
-    if (webDevSkills.length > 0) {
-      skillsArray.push(`<strong>Web Development:</strong> ${webDevSkills.join(', ')}`);
-    }
-    
-    // DevOps & Tools (if you want to separate some tools)
-    if (formData.skills?.databases?.length > 0) {
-      skillsArray.push(`<strong>Database:</strong> ${formData.skills.databases.join(', ')}`);
-    }
-    
-    return skillsArray.join('<br>');
-  };
+const formatSkills = () => {
+  const skillsArray = [];
+  
+  // Programming Languages
+  if (formData.skills?.languages?.length > 0) {
+    skillsArray.push(
+      `<div style="display:flex;gap:10px;align-items:center;">
+        <strong style="font-family: 'Times New Roman';font-size: 10px;">Programming Languages:</strong> 
+        <p style="font-family: 'Times New Roman';font-size: 10px;">${formData.skills.languages.join(', ')}</p>
+      </div>`
+    );
+  }
+  
+  // Web Development (combine frameworks and tools)
+  const webDevSkills = [
+    ...(formData.skills?.frameworks || []),
+    ...(formData.skills?.tools || [])
+  ];
+  if (webDevSkills.length > 0) {
+    skillsArray.push(
+      `<div style="display:flex;gap:10px;align-items:center;">
+        <strong style="font-family: 'Times New Roman';font-size: 10px;">Web Development:</strong> 
+        <p style="font-family: 'Times New Roman';font-size: 10px;">${webDevSkills.join(', ')}</p>
+      </div>`
+    );
+  }
+  
+  // Database
+  if (formData.skills?.databases?.length > 0) {
+    skillsArray.push(
+      `<div style="display:flex;gap:10px;align-items:center;">
+        <strong style="font-family: 'Times New Roman';font-size: 10px;">Database:</strong> 
+        <p style="font-family: 'Times New Roman';font-size: 10px;">${formData.skills.databases.join(', ')}</p>
+      </div>`
+    );
+  }
 
-  const formatExperience = () => {
-    return formData.work_experience
-      ?.map(exp => {
-        const duration = exp.start && exp.end 
-          ? `${exp.start} - ${exp.end}` 
-          : (exp.year || '');
+  // Wrap all inside one parent div
+  return `
+    <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:15px;">
+      ${skillsArray.join('')}
+    </div>
+  `;
+};
+
+
+const formatExperience = () => {
+  return formData.work_experience
+    ?.map(exp => {
+      const duration = exp.start && exp.end 
+        ? `${exp.start} - ${exp.end}` 
+        : (exp.year || '');
+
+      // Convert asterisk bullet points to HTML list
+      const formatBulletPoints = (text) => {
+        if (!text) return '';
+        const bullets = text.split('*').filter(bullet => bullet.trim());
         
-        return `
-          <div style="margin-bottom: 20px;">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-              <strong>${exp.company || ''}</strong>
-              <em>${duration}</em>
-            </div>
-            <div style="font-style: italic; margin-bottom: 8px;">
-              ${exp.role || ''}
-            </div>
-            ${exp.experience ? `<div>${exp.experience}</div>` : ''}
+        if (bullets.length <= 1) {
+          return `<div>${text}</div>`;
+        }
+
+        const listItems = bullets
+          .map(bullet => `<li style="margin-bottom: 2px;">${bullet.trim()}</li>`)
+          .join('');
+
+        return `<ul style=" font-size:10px;">${listItems}</ul>`;
+      };
+
+      return `
+        <div >
+          <div style="display: flex; justify-content: space-between; ">
+        
+          <strong style="font-family: 'Times New Roman';font-size: 10pt;">${exp.company || ''}</strong>
+         
+          <em style="font-family: 'Times New Roman';font-size: 10px;">${duration}</em>
           </div>
-        `;
-      })
-      .join('') || '';
-  };
+          <div style="font-style: italic; font-size: 11px;">
+            ${exp.role || ''}
+          </div>
+          ${exp.experience ? formatBulletPoints(exp.experience) : ''}
+        </div>
+      `;
+    })
+    .join('') || '';
+};
+
 
   const formatEducation = () => {
     return formData.education
@@ -57,11 +97,17 @@ export function fillTemplate(template, formData) {
         return `
           <div style="margin-bottom: 15px;">
             <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-              <strong>${ed.degree || ''}</strong>
-              <em>${duration}</em>
+              <span style="font-family: 'Times New Roman';font-size: 10px;">${ed.institution || ''}:${ed.degree || ''}</span>
+              <div>
+              <em style="font-family: 'Times New Roman';font-size: 10px;">${duration}</em>
+              ${ed.result ? `<div>
+              <em style="font-family: 'Times New Roman';font-size: 10px;">
+              <strong style="font-family: 'Times New Roman';font-size: 10px;">Major GPA:</strong> 
+              ${ed.result}
+              </em>
+              </div>` : ''}
+              </div>
             </div>
-            <div>${ed.school || ''}</div>
-            ${ed.grade ? `<div><strong>Major GPA:</strong> ${ed.grade}</div>` : ''}
           </div>
         `;
       })
@@ -71,19 +117,63 @@ export function fillTemplate(template, formData) {
   const formatProjects = () => {
     return formData.projects
       ?.map(project => {
+                  // Convert asterisk bullet points to HTML list
+          const formatBulletPoints = (text) =>{
+            if (!text) return '';
+            //  Split by asterisks and filter out empty strings
+            const bullets = text.split('*').filter(bullet => bullet.trim());
+            if(bullets <= 1){
+              // If no asterisks found, return as regular text
+              return `<div>${text}</div>`;
+            }
+            const listItems = bullets
+            .map(bullet => `<li style="margin-bottom: 2px;font-size:10px;">${bullet.trim()}</li>`)
+            .join('');
+
+            return `<ul style="margin: 0px 0; ">${listItems}</ul>`;
+          }
+          // margin-bottom: 15px;
         return `
-          <div style="margin-bottom: 15px;">
-            <div style="margin-bottom: 5px;">
-              <strong>${project.name || ''}</strong> - 
-              <em>${project.technologies || ''}</em>
+          <div style="margin-bottom: 4px;">
+            <div style="margin-bottom: 2px;">
+              <strong style="font-family: 'Times New Roman';font-size: 11px;">${project.title || ''}</strong> - 
+              <em style="font-family: 'Times New Roman';font-size: 10px;">${project.technologies || ''}</em>
             </div>
-            ${project.description ? `<div>${project.description}</div>` : ''}
-            ${project.liveUrl ? `<div><strong>Live demo:</strong> <a href="${project.liveUrl}">${project.liveUrl}</a></div>` : ''}
+            ${project.description ? `<div>${formatBulletPoints(project.description)}</div>` : ''}
+            ${project.liveUrl ? `<em style="margin-left:10px;font-family: 'Times New Roman';font-size:10px;">Live demo:<a href="${project.liveUrl}">${project.liveUrl}</a></em>` : ''}
           </div>
         `;
       })
       .join('') || '';
   };
+const formatSummary = () => {
+  const text = formData.professional_summary;
+
+  if (!text) return '';
+
+  const bullets = text.split('*').filter(bullet => bullet.trim());
+
+  if (bullets.length <= 1) {
+    // If no asterisks found, return as regular text
+    return `
+      <div style="margin-bottom: 15px;">
+        <div style="font-size:10px;">${text}</div>
+      </div>
+    `;
+  }
+
+  const listItems = bullets
+    .map(bullet => `<li style="margin-bottom: 8px;">${bullet.trim()}</li>`)
+    .join('');
+
+  return `
+    <div style="margin-bottom: 15px;">
+      <ul style="margin: 8px 0; font-size:10px;">${listItems}</ul>
+    </div>
+  `;
+};
+
+
 console.log("name",formData.personal_info);
   // Professional resume template
   const professionalTemplate = `
@@ -112,7 +202,7 @@ console.log("name",formData.personal_info);
         <h2 style="font-size: 16px; margin-bottom: 10px; border-bottom: 1px solid #000; padding-bottom: 3px;">
           Summary of qualification
         </h2>
-        <div style="font-size: 14px;">
+        <div style="font-size: 11px;">
           ${formData.professional_summary}
         </div>
       </div>
@@ -174,7 +264,7 @@ console.log("name",formData.personal_info);
     return template
       .replace("{{name}}", formData.personal_info?.name || "")
       .replace("{{email}}", formData.personal_info?.email || "")
-      .replace("{{summary}}", formData.professional_summary || "")
+      .replace("{{summary}}", formatSummary())
       .replace("{{skills}}", formatSkills())
       .replace("{{experience}}", formatExperience())
       .replace("{{education}}", formatEducation())

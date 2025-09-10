@@ -42,13 +42,20 @@ const SummaryStep: React.FC<SummaryStepProps> = ({
           )}${JSON.stringify(skills.frameworks)}${JSON.stringify(
           skills.tools
         )}${JSON.stringify(skills.databases)}
-          Create a compelling 2-3 sentence professional summary that highlights their key strengths and experience. Make it specific and impactful.`;
+          Guidelines:
+- Return strictly 3 clear and concise bullet points.  
+- Do not add headings or extra explanations or double astrisk.  
+- Use strong, impactful action verbs (e.g., "engineered", "optimized", "led", "developed").  
+- Highlight achievements, problem-solving ability, and technical expertise.  
+- Keep it professional and results-oriented.  
+- Keep the meaning true to the provided details, but polish language for maximum impact. 
+          `;
         const result = await callGeminiAPI(prompt);
         updateSummary(result);
       } else if (summary.length > 5) {
-        const prompt = `Polish the following resume summary by fixing only grammar, punctuation, and readability issues. 
-Do not shorten, expand, or provide multiple versions. 
-Return exactly one improved summary:
+        const prompt = `Polish the following work experience description by improving grammar, punctuation, readability, and incorporating relevant technical terms where appropriate. 
+Do not shorten , no headings or  expand the overall meaning beyond the original context. 
+Return the polished version strictly as 3 clear and concise bullet points:
 
 "${summary}"`;
         const result = await callGeminiAPI(prompt);

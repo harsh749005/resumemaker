@@ -4,24 +4,24 @@ export const template = `
     <style>
       body {
         margin: 1in; /* Word-like margins */
-        font-family: Arial, sans-serif;
+        font-family: 'Times New Roman';
         font-size: 12pt;
         color: #333;
       }
 
       h1 {
         margin: 0;
-        font-size: 28pt;
-        font-weight: bold;
-        color: #2c3e50;
+        font-size: 38pt;
+        color: #000;
+        font-weight: normal;
       }
 
       h2 {
         margin-top: 24px;
-        font-size: 16pt;
+        font-size: 11pt;
         border-bottom: 1px solid #ccc;
         padding-bottom: 4px;
-        color: #2c3e50;
+        color: #000;
       }
 
       .header {
@@ -43,7 +43,7 @@ export const template = `
       }
 
       ul {
-        margin: 4px 0 0 20px;
+        margin: 0px 0 0 -20px;
       }
 
       li {
@@ -66,9 +66,7 @@ export const template = `
       </div>
     </div>
 
-    <!-- Summary -->
-    <h2>Summary of Qualification</h2>
-    <p>{{summary}}</p>
+
 
     <!-- Experience -->
     <h2>Experience</h2>
@@ -86,6 +84,9 @@ export const template = `
     <h2>Skills</h2>
     <p>{{skills}}</p>
 
+    <!-- Summary -->
+    <h2>Summary of Qualification</h2>
+    <p>{{summary}}</p>
     <!-- Education -->
     <h2>Education</h2>
     <ul>

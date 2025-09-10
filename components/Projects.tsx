@@ -134,10 +134,10 @@ const ProjectStep: React.FC<ProjectStepProps> = ({
     setGeneratingIndex(index);
 
     try {
-      const prompt = `Polish the following project description by improving grammar, punctuation, readability, and incorporating relevant technical terms where appropriate. 
-Format the response strictly as 5 clear and concise bullet points, starting each point with a strong action verb (e.g., Built, Developed, Implemented, Designed, Optimized). 
-Ensure the points highlight technical impact and include relevant technologies or methodologies when suitable. 
-Do not expand or change the overall meaning beyond the original context.
+      const prompt = `Polish the following work experience description by improving grammar, punctuation, readability, and incorporating relevant technical terms where appropriate. 
+Do not shorten , no headings or  expand the overall meaning beyond the original context. 
+Return the polished version strictly as 4 clear and concise bullet points:
+
 
 "${proj.description}"`;
 
@@ -196,6 +196,13 @@ Do not expand or change the overall meaning beyond the original context.
                 value={exp.title || ""}
                 onChangeText={(val) => updateProjects(index, "title", val)}
               />
+                            <TextInput
+                style={styles.input}
+                placeholder="reactjs , nextjs , mongodb *"
+                placeholderTextColor="#a9a9a9"
+                value={exp.technologies || ""}
+                onChangeText={(val) => updateProjects(index, "technologies", val)}
+              />
 
               <TextInput
                 style={[styles.input, styles.multilineInput]}
@@ -208,6 +215,13 @@ Do not expand or change the overall meaning beyond the original context.
                 onChangeText={(val) =>
                   updateProjects(index, "description", val)
                 }
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="Live link *"
+                placeholderTextColor="#a9a9a9"
+                value={exp.liveUrl || ""}
+                onChangeText={(val) => updateProjects(index, "liveUrl", val)}
               />
 
               {/* Polish Button */}

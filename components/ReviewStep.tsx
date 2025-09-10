@@ -101,6 +101,25 @@ const ReviewStep: React.FC<ReviewStepProps> = ({ data, prevStep }) => {
               </View>
             ))}
           </View>
+                      {/* Education Section */}
+          <View style={styles.sectionCard}>
+            <Text style={styles.sectionTitle}>Education</Text>
+            {data.projects.map((proj: any, i: number) => (
+              <View key={i} style={styles.itemContainer}>
+                <View style={styles.itemHeader}>
+                  <Text style={styles.itemTitle}>{proj.title}</Text>
+                </View>
+                <View style={styles.projectInfoRow}>
+                  <Text style={styles.infoLabel}>Project description :</Text>
+                  <Text style={styles.infoValue}>{proj.description}</Text>
+                </View>
+                <View style={styles.infoRow}>
+                  <Text style={styles.infoLabel}>Live link:</Text>
+                  <Text style={styles.infoValue}>{proj.liveUrl}</Text>
+                </View>
+              </View>
+            ))}
+          </View>
 
           {/* Education Section */}
           <View style={styles.sectionCard}>
@@ -112,7 +131,7 @@ const ReviewStep: React.FC<ReviewStepProps> = ({ data, prevStep }) => {
                 </View>
                 <View style={styles.infoRow}>
                   <Text style={styles.infoLabel}>Field of Study:</Text>
-                  <Text style={styles.infoValue}>{edu.field}</Text>
+                  <Text style={styles.infoValue}>{edu.degree}</Text>
                 </View>
                 <View style={styles.infoRow}>
                   <Text style={styles.infoLabel}>Institution:</Text>
@@ -120,7 +139,7 @@ const ReviewStep: React.FC<ReviewStepProps> = ({ data, prevStep }) => {
                 </View>
                 <View style={styles.infoRow}>
                   <Text style={styles.infoLabel}>CGPA:</Text>
-                  <Text style={styles.infoValue}>{edu.cgpa}</Text>
+                  <Text style={styles.infoValue}>{edu.result}</Text>
                 </View>
               </View>
             ))}
@@ -305,7 +324,11 @@ const styles = StyleSheet.create({
     color: "#007AFF",
     fontFamily: "WorkSansMedium",
   },
-
+  projectInfoRow: {
+    flexDirection: "column",
+    marginBottom: 4,
+    flexWrap: "wrap",
+  },
   infoRow: {
     flexDirection: "row",
     marginBottom: 4,
