@@ -101,7 +101,7 @@ const ReviewStep: React.FC<ReviewStepProps> = ({ data, prevStep }) => {
               </View>
             ))}
           </View>
-                      {/* Education Section */}
+          {/* Education Section */}
           <View style={styles.sectionCard}>
             <Text style={styles.sectionTitle}>Education</Text>
             {data.projects.map((proj: any, i: number) => (
@@ -187,6 +187,16 @@ const ReviewStep: React.FC<ReviewStepProps> = ({ data, prevStep }) => {
               </View>
             ))}
           </View> */}
+          {/* Other Links Section */}
+          <View style={styles.sectionCard}>
+            <Text style={styles.sectionTitle}>Other Links</Text>
+            {Object.entries(data.otherLinks).map(([key, value], index) => (
+              <View key={index} style={styles.infoRow}>
+                <Text style={styles.infoLabel}>{key}</Text>
+                <Text style={styles.infoValue}>{value}</Text>
+              </View>
+            ))}
+          </View>
 
           {/* Professional Summary Section */}
           <View style={styles.sectionCard}>
@@ -215,7 +225,14 @@ const ReviewStep: React.FC<ReviewStepProps> = ({ data, prevStep }) => {
 
           <TouchableOpacity style={styles.nextButton} onPress={handleSubmit}>
             {isGenerating ? (
-              <View style={{ display: "flex", flexDirection: "row", gap: 8 ,alignItems:"center"}}>
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: 8,
+                  alignItems: "center",
+                }}
+              >
                 <CustomLoader size={14} color="#ffffff" bars={8} />
                 <Text style={styles.nextButtonText}>Generateing...</Text>
               </View>

@@ -59,10 +59,7 @@ export const template = `
         <div class="title">{{title}}</div>
       </div>
       <div class="contact">
-        <div>{{email}}</div>
-        <div>{{phone}}</div>
-        <div>{{linkedin}}</div>
-        <div>{{github}}</div>
+        <div>{{links}}</div>
       </div>
     </div>
 

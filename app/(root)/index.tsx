@@ -9,6 +9,7 @@ import Projects from "@/components/Projects";
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import PersonalInfoStep from "@/components/PersonalInfoStep";
+import OtherLinks from "@/components/OtherLinks";
 
 export default function Index() {
   const [step, setStep] = useState(1);
@@ -27,6 +28,7 @@ export default function Index() {
     // certifications: string[];
     // languages: string[];
     selected_template: string;
+    otherLinks: Record<string, any>;
   }>({
     personal_info: {},
     professional_summary: "",
@@ -42,6 +44,7 @@ export default function Index() {
     // certifications: [],
     // languages: [],
     selected_template: "",
+    otherLinks: {},
   });
 
   // 🔹 Update Personal Info (nested object)
@@ -184,6 +187,14 @@ export default function Index() {
     setFormData((prev) => ({ ...prev, selected_template: value }));
   };
 
+  // 🔹 Update updateOtherLinks (nested object)
+  const updateOtherLinks = (field: string, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      otherLinks: { ...prev.otherLinks, [field]: value },
+    }));
+  };
+
   // 🔹 Navigation
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
@@ -273,8 +284,16 @@ export default function Index() {
             prevStep={prevStep}
           />
         )}
-
         {step === 7 && (
+          <OtherLinks
+            data={formData}
+            updateOtherLinks={updateOtherLinks}
+            nextStep={nextStep}
+            prevStep={prevStep}
+          />
+        )}
+
+        {step === 8 && (
           <SummaryStep
             data={formData}
             summary={formData.professional_summary}
@@ -291,7 +310,7 @@ export default function Index() {
             updateSelectedTemplate={updateSelectedTemplate}
           />
         )} */}
-        {step === 8 && <ReviewStep data={formData} prevStep={prevStep} />}
+        {step === 9 && <ReviewStep data={formData} prevStep={prevStep} />}
       </View>
     </SafeScreen>
   );

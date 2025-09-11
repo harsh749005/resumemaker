@@ -172,7 +172,24 @@ const formatSummary = () => {
     </div>
   `;
 };
+const formatLinks = () => {
+  const links = formData.otherLinks;
+  if (!links || Object.keys(links).length === 0) return '';
 
+  // Convert object to [key, value] pairs
+  const listItems = Object.entries(links)
+    .map(([key, value]) => {
+      // Only show value (link), ignore key (name)
+      return `<p style="margin-bottom: 1px;"><a href =${value} style="color:black;fontsize:8px">${value}</a></p>`;
+    })
+    .join('');
+
+  return `
+    <div style="display:flex;flex-direction:column;gap:2px">
+      ${listItems}
+    </div>
+  `;
+};
 
 console.log("name",formData.personal_info);
   // Professional resume template
@@ -269,7 +286,7 @@ console.log("name",formData.personal_info);
       .replace("{{experience}}", formatExperience())
       .replace("{{education}}", formatEducation())
       .replace("{{projects}}", formatProjects())
-      .replace("{{linkedin}}", formData.personal_info?.email || "")
+      .replace("{{links}}", formatLinks())
   }
 
   // Return the professional template by default
