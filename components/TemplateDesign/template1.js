@@ -17,7 +17,7 @@ export const template = `
       }
 
       h2 {
-        margin-top: 24px;
+        margin-top: 5px;
         font-size: 11pt;
         border-bottom: 1px solid #ccc;
         padding-bottom: 4px;
@@ -31,8 +31,11 @@ export const template = `
         margin-bottom: 20px;
       }
 
-      .title {
-        font-size: 14pt;
+      .info {
+        display:flex;
+        flex-direction:column;
+        gap:1px;
+        font-size: 12px;
         color: #555;
       }
 
@@ -56,7 +59,7 @@ export const template = `
     <div class="header">
       <div>
         <h1>{{name}}</h1>
-        <div class="title">{{title}}</div>
+        <div class="info"><p>{{email}}</p><p>{{number}}</p></div>
       </div>
       <div class="contact">
         <div>{{links}}</div>

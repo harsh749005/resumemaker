@@ -69,7 +69,7 @@ const formatExperience = () => {
       };
 
       return `
-        <div >
+        <div style="margin-top:4px">
           <div style="display: flex; justify-content: space-between; ">
         
           <strong style="font-family: 'Times New Roman';font-size: 10pt;">${exp.company || ''}</strong>
@@ -95,8 +95,8 @@ const formatExperience = () => {
           : (ed.year || '');
         
         return `
-          <div style="margin-bottom: 15px;">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+          <div style="margin-bottom: 2px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 2px;">
               <span style="font-family: 'Times New Roman';font-size: 10px;">${ed.institution || ''}:${ed.degree || ''}</span>
               <div>
               <em style="font-family: 'Times New Roman';font-size: 10px;">${duration}</em>
@@ -156,7 +156,7 @@ const formatSummary = () => {
   if (bullets.length <= 1) {
     // If no asterisks found, return as regular text
     return `
-      <div style="margin-bottom: 15px;">
+      <div style="margin-bottom: 2px;">
         <div style="font-size:10px;">${text}</div>
       </div>
     `;
@@ -167,8 +167,8 @@ const formatSummary = () => {
     .join('');
 
   return `
-    <div style="margin-bottom: 15px;">
-      <ul style="margin: 8px 0; font-size:10px;">${listItems}</ul>
+    <div style="margin-bottom: 2px;">
+      <ul style="margin: 4px 0; font-size:10px;">${listItems}</ul>
     </div>
   `;
 };
@@ -180,12 +180,12 @@ const formatLinks = () => {
   const listItems = Object.entries(links)
     .map(([key, value]) => {
       // Only show value (link), ignore key (name)
-      return `<p style="margin-bottom: 1px;"><a href =${value} style="color:black;fontsize:8px">${value}</a></p>`;
+      return `<p style="margin-bottom: 1px;"><a href =${value} style="color:black;font-size:8px">${value}</a></p>`;
     })
     .join('');
 
   return `
-    <div style="display:flex;flex-direction:column;gap:2px">
+    <div style="display:flex;flex-direction:column;">
       ${listItems}
     </div>
   `;
