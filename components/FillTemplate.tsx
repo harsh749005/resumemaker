@@ -1,47 +1,47 @@
 export function fillTemplate(template, formData) {
-const formatSkills = () => {
-  const skillsArray = [];
-  
-  // Programming Languages
-  if (formData.skills?.languages?.length > 0) {
-    skillsArray.push(
-      `<div style="display:flex;gap:10px;align-items:center;">
-        <strong style="font-family: 'Times New Roman';font-size: 10px;">Programming Languages:</strong> 
-        <p style="font-family: 'Times New Roman';font-size: 10px;">${formData.skills.languages.join(', ')}</p>
-      </div>`
-    );
-  }
-  
-  // Web Development (combine frameworks and tools)
-  const webDevSkills = [
-    ...(formData.skills?.frameworks || []),
-    ...(formData.skills?.tools || [])
-  ];
-  if (webDevSkills.length > 0) {
-    skillsArray.push(
-      `<div style="display:flex;gap:10px;align-items:center;">
-        <strong style="font-family: 'Times New Roman';font-size: 10px;">Web Development:</strong> 
-        <p style="font-family: 'Times New Roman';font-size: 10px;">${webDevSkills.join(', ')}</p>
-      </div>`
-    );
-  }
-  
-  // Database
-  if (formData.skills?.databases?.length > 0) {
-    skillsArray.push(
-      `<div style="display:flex;gap:10px;align-items:center;">
-        <strong style="font-family: 'Times New Roman';font-size: 10px;">Database:</strong> 
-        <p style="font-family: 'Times New Roman';font-size: 10px;">${formData.skills.databases.join(', ')}</p>
-      </div>`
-    );
-  }
-
-  // Wrap all inside one parent div
-  return `
-    <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:15px;">
-      ${skillsArray.join('')}
-    </div>
-  `;
+const formatSkills = () => { 
+  const skillsArray = []; 
+   
+  // Programming Languages 
+  if (formData.skills?.languages?.length > 0) { 
+    skillsArray.push( 
+      `<div style="display:flex;gap:8px;align-items:baseline;margin:0;padding:0;"> 
+        <strong style="font-family:'Times New Roman';font-size:10px;margin:0;padding:0;">Programming Languages:</strong>  
+        <span style="font-family:'Times New Roman';font-size:10px;margin:0;padding:0;">${formData.skills.languages.join(', ')}</span> 
+      </div>` 
+    ); 
+  } 
+   
+  // Web Development (combine frameworks and tools) 
+  const webDevSkills = [ 
+    ...(formData.skills?.frameworks || []), 
+    ...(formData.skills?.tools || []) 
+  ]; 
+  if (webDevSkills.length > 0) { 
+    skillsArray.push( 
+      `<div style="display:flex;gap:8px;align-items:baseline;margin:0;padding:0;"> 
+        <strong style="font-family:'Times New Roman';font-size:10px;margin:0;padding:0;">Web Development:</strong>  
+        <span style="font-family:'Times New Roman';font-size:10px;margin:0;padding:0;">${webDevSkills.join(', ')}</span> 
+      </div>` 
+    ); 
+  } 
+   
+  // Database 
+  if (formData.skills?.databases?.length > 0) { 
+    skillsArray.push( 
+      `<div style="display:flex;gap:8px;align-items:baseline;margin:0;padding:0;"> 
+        <strong style="font-family:'Times New Roman';font-size:10px;margin:0;padding:0;">Database:</strong>  
+        <span style="font-family:'Times New Roman';font-size:10px;margin:0;padding:0;">${formData.skills.databases.join(', ')}</span> 
+      </div>` 
+    ); 
+  } 
+ 
+  // Wrap all inside one parent div with minimal spacing
+  return ` 
+    <div style="display:flex;flex-direction:column;gap:2px;margin:0;padding:0;line-height:1.2;"> 
+      ${skillsArray.join('')} 
+    </div> 
+  `; 
 };
 
 
@@ -268,7 +268,8 @@ console.log("name",formData.personal_info);
       .replace("{{skills}}", formatSkills())
       .replace("{{experience}}", formatExperience())
       .replace("{{education}}", formatEducation())
-      .replace("{{projects}}", formatProjects());
+      .replace("{{projects}}", formatProjects())
+      .replace("{{linkedin}}", formData.personal_info?.email || "")
   }
 
   // Return the professional template by default
