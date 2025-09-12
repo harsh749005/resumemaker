@@ -34,16 +34,20 @@ export const template = `
         font-family: 'Times New Roman';
       }
 
-      .info {
-        display:flex;
-        flex-direction:column;
-        gap:1px;
-        font-size: 12px;
-        color: #555;
-        height:60px;
-        background-color: coral;
-        font-family: 'Times New Roman';
-      }
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px; /* small controlled spacing */
+  font-size: 12px;
+  color: #555;
+  height: 60px;
+  font-family: 'Times New Roman', serif;
+}
+
+.info p {
+  margin: 0; /* remove default <p> margins */
+}
+
 
       .contact {
         text-align: right;
@@ -65,10 +69,11 @@ export const template = `
     <div class="header">
       <div>
         <h1>{{name}}</h1>
-        <div class="info">
-        <p style="font-family: 'Times New Roman';">{{email}}</p>
-        <p style="font-family: 'Times New Roman';margin-bottom:15px">{{number}}</p>
-        </div>
+<div class="info">
+  <p>{{email}}</p>
+  <p>{{number}}</p>
+</div>
+
       </div>
       <div class="contact">
         <div>{{links}}</div>
@@ -104,4 +109,4 @@ export const template = `
   </body>
 </html>
 
-`
+`;
