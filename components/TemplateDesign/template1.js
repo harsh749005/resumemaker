@@ -14,6 +14,7 @@ export const template = `
         font-size: 38pt;
         color: #000;
         font-weight: normal;
+        font-family: 'Times New Roman';
       }
 
       h2 {
@@ -22,6 +23,7 @@ export const template = `
         border-bottom: 1px solid #ccc;
         padding-bottom: 4px;
         color: #000;
+        font-family: 'Times New Roman';
       }
 
       .header {
@@ -29,6 +31,7 @@ export const template = `
         justify-content: space-between;
         align-items: flex-start;
         margin-bottom: 20px;
+        font-family: 'Times New Roman';
       }
 
       .info {
@@ -37,6 +40,9 @@ export const template = `
         gap:1px;
         font-size: 12px;
         color: #555;
+        height:60px;
+        background-color: coral;
+        font-family: 'Times New Roman';
       }
 
       .contact {
@@ -59,7 +65,10 @@ export const template = `
     <div class="header">
       <div>
         <h1>{{name}}</h1>
-        <div class="info"><p>{{email}}</p><p>{{number}}</p></div>
+        <div class="info">
+        <p style="font-family: 'Times New Roman';">{{email}}</p>
+        <p style="font-family: 'Times New Roman';margin-bottom:15px">{{number}}</p>
+        </div>
       </div>
       <div class="contact">
         <div>{{links}}</div>

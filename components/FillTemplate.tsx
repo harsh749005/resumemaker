@@ -281,6 +281,7 @@ console.log("name",formData.personal_info);
     return template
       .replace("{{name}}", formData.personal_info?.name || "")
       .replace("{{email}}", formData.personal_info?.email || "")
+      .replace("{{number}}", formData.personal_info?.number || "")
       .replace("{{summary}}", formatSummary())
       .replace("{{skills}}", formatSkills())
       .replace("{{experience}}", formatExperience())

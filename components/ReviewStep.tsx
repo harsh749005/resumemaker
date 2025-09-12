@@ -71,6 +71,12 @@ const ReviewStep: React.FC<ReviewStepProps> = ({ data, prevStep }) => {
                 {user?.emailAddresses[0].emailAddress}
               </Text>
             </View>
+            <View style={styles.infoRow}>
+              <Text style={styles.infoLabel}>Number:</Text>
+              <Text style={styles.infoValue}>
+                {data.personal_info.number}
+              </Text>
+            </View>
           </View>
 
           {/* Work Experience Section */}

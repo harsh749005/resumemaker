@@ -38,7 +38,7 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
         {/* Name Field */}
         <TextInput
           style={styles.input}
-          placeholder="Full Name"
+          placeholder="Name *"
           value={data.name || ""}
           onChangeText={(val) => updatePersonalInfo("name", val)}
           onEndEditing={() => {
@@ -51,13 +51,25 @@ const PersonalInfoStep: React.FC<PersonalInfoStepProps> = ({
         {/* Email Field */}
         <TextInput
           style={styles.input}
-          placeholder="Email"
+          placeholder="Email *"
           keyboardType="email-address"
           value={data.email || ""}
           onChangeText={(val) => updatePersonalInfo("email", val)}
           onEndEditing={() => {
             if (!data.name && user?.emailAddresses[0].emailAddress) {
               updatePersonalInfo("name", user?.emailAddresses[0].emailAddress);
+            }
+          }}
+        />
+                {/* Name Field */}
+        <TextInput
+          style={styles.input}
+          placeholder="Number *"
+          value={data.number || ""}
+          onChangeText={(val) => updatePersonalInfo("number", val)}
+          onEndEditing={() => {
+            if (!data.name && user?.username) {
+              updatePersonalInfo("number", user.username);
             }
           }}
         />
